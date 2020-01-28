@@ -1,0 +1,48 @@
+<project name='seedebb.brepair' default='compile'>
+
+   <property file='../../../../../../build.properties' />
+   <property name='UPRO' value='/research/people/spr' />
+   <property name='PRO' value='/pro' />
+   <property name='BUBBLES' value='/pro/bubbles' />
+   <available file="${PRO}/ivy" type="dir" property="ivy.present" />
+   <target name="init1" if="ivy.present" >
+      <property name='IVYBIN' value='${PRO}/ivy/java' />
+   </target>
+   <target name="init2" unless="ivy.present" >
+      <property name='IVYBIN' value='${BUBBLES}/lib/ivy.jar' />
+   </target>
+   <target name='init' depends='init1,init2' >
+      <path id='seedebb.classpath'>
+	 <pathelement location='${UPRO}/seedebb/java' />
+	 <pathelement location='${BUBBLES}/java' />
+	 <pathelement location='${IVYBIN}' />
+      </path>
+      <path id='test.classpath'>
+	 <pathelement location='${UPRO}/seedebb/java' />
+	 <pathelement location='${BUBBLES}/java' />
+	 <pathelement location='${IVYBIN}' />
+      </path>
+   </target>
+
+   <target name='compile' depends='init'>
+      <javac srcdir='.' destdir='${UPRO}/seedebb/java' debug='on' deprecation='on'
+		includeantruntime='false'>
+	 <classpath refid='seedebb.classpath' />
+	 <compilerarg value='-Xlint:all' />
+      </javac>
+   </target>
+
+   <target name='clean'>
+      <delete dir='${BUBBLES}/java/edu/brown/cs/seedebb/brepair' />
+   </target>
+
+   <target name='test' depends='compile'>
+      <java classname='edu.brown.cs.seedebb.brepair.BrepairTest' fork='true'>
+	 <classpath refid='test.classpath' />
+	 <assertions><enable/></assertions>
+      </java>
+   </target>
+
+</project>
+
+

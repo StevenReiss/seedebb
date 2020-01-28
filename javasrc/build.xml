@@ -1,0 +1,28 @@
+<project name='seedebb' default='all' >
+
+   <property name='PRO' value='/research' />
+   <property name='IVYBIN' value='/research/ivy/java' />
+   <property name='SEEDE' value='/research/people/spr/seede' />
+
+   <target name='all'>
+      <ant antfile="build.xml" dir="edu/brown/cs/seedebb/bicex" />
+      <ant antfile="build.xml" dir="edu/brown/cs/seedebb/brepair" />
+   </target>
+
+   <path id='jdocsrc'>
+      <pathelement location='${SEEDE}/java' />
+      <pathelement location='${IVYBIN}' />
+      <fileset dir='${SEEDE}/lib/' includes='asm*.jar' />
+   </path>
+
+
+   <target name='doc'>
+      <javadoc sourcepathref='jdocsrc' classpathref='bubbles.classpath' destdir='${PRO}/bubbles/doc'>
+	 <package name='edu.brown.cs.seedebb.bsean' />
+      </javadoc>
+   </target>
+
+
+</project>
+
+

@@ -1,0 +1,46 @@
+Bicex.PanelTopColor	:	200,255,100
+Bicex.PanelBottomColor	:	white
+
+Bicex.CallGraphBackground :	255,255,64
+Bicex.CallGraphCurrent	:	160,160,255
+
+Bicex.DataViewBackground :	white
+Bicex.DataViewLine	:	black
+
+Bicex.VarHistoryNode	:	yellow
+Bicex.VarHistoryNodeBorder :	black
+
+Bicex.annot.color	:	0x400000ff
+
+Bicex.EvalTopColor	:	200,255,100
+Bicex.EvalBottomColor	:	255,255,150
+Bicex.EvalScrollColor	:	100,128,50
+Bicex.EvalScrollContextColor :	gray
+
+Bicex.StatusDefault	:	white
+Bicex.StatusError	:	255,196,196
+Bicex.StatusTimeout	:	255,255,196
+Bicex.StatusCompilerError :	255,255,196
+Bicex.StatusNormal	:	196,255,196
+Bicex.StatusPending	:	196,196,255
+
+Bicex.LineGraphDefault	:	255,255,64
+Bicex.LineGraphCurrent	:	160,160,255
+
+Bicex.StackDefault	:	black
+
+Bicex.StackViewBackground :	white
+Bicex.StackViewOutline	:	black
+
+
+
+Brepair.AnnotColor	:	255,255,0,128
+
+Brepair.TopColor	:	255,255,225
+Brepair.BottomColor	:	white
+Brepair.RepairAnnotColor :	yellow
+Brepair.SelectionColor	:	255,255,127
+
+
+
+
