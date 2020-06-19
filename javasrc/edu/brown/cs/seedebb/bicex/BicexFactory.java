@@ -520,7 +520,7 @@ Element sendSeedeMessage(String id,String cmd,CommandArgs args,String cnts)
 
    mc.send(msg,rply,MINT_MSG_FIRST_NON_NULL);
 
-   Element rslt = rply.waitForXml(60000);
+   Element rslt = rply.waitForXml(300000);
 
    BoardLog.logD("BICEX","Reply from SEEDE: " + IvyXml.convertXmlToString(rslt));
    if (rslt == null && (cmd.equals("START") || cmd.equals("BEGIN"))) {
@@ -785,11 +785,11 @@ private static class StartAction implements BudaConstants.ButtonListener {
 
    @Override public void buttonActivated(BudaBubbleArea bba,String id,Point pt) {
       BumpProcess bp = findProcess(bba,pt);
-
+   
       BoardMetrics.noteCommand("BICEX","Start");
-
+   
       BowiFactory.startTask();
-
+   
       SeedeStarter ss = new SeedeStarter(bp,bba,pt);
       BoardThreadPool.start(ss);
     }
@@ -797,8 +797,8 @@ private static class StartAction implements BudaConstants.ButtonListener {
    private BumpProcess findProcess(BudaBubbleArea bba,Point pt) {
       Object proc = bba.getProperty("Bddt.process");
       if (proc != null) {
-	 BumpProcess bp = (BumpProcess) proc;
-	 if (bp.isRunning()) return bp;
+         BumpProcess bp = (BumpProcess) proc;
+         if (bp.isRunning()) return bp;
        }
       BicexExecModel emdl = getFactory().exec_model;
       List<BumpProcess> active = emdl.getActiveProcesses();
@@ -806,22 +806,22 @@ private static class StartAction implements BudaConstants.ButtonListener {
       if (active.size() == 1) return active.get(0);
       Set<File> activefiles = computeRegionFiles(bba,pt);
       if (activefiles.isEmpty()) return null;
-
+   
       for (Iterator<BumpProcess> it = active.iterator(); it.hasNext(); ) {
-	 BumpProcess bp = it.next();
-	 List<BumpStackFrame> frms = emdl.getActiveFrames(bp);
-	 if (frms == null) it.remove();
-	 else if (!bp.getName().startsWith("B_")) it.remove();
-	 else {
-	    boolean fnd = false;
-	    for (BumpStackFrame f : frms) {
-	       if (activefiles.contains(f.getFile())) fnd = true;
-	     }
-	    if (!fnd) it.remove();
-	  }
+         BumpProcess bp = it.next();
+         List<BumpStackFrame> frms = emdl.getActiveFrames(bp);
+         if (frms == null) it.remove();
+         else if (!bp.getName().startsWith("B_")) it.remove();
+         else {
+            boolean fnd = false;
+            for (BumpStackFrame f : frms) {
+               if (activefiles.contains(f.getFile())) fnd = true;
+             }
+            if (!fnd) it.remove();
+          }
        }
       if (active.size() == 1) return active.get(0);
-
+   
       return null;
     }
 
@@ -859,8 +859,8 @@ private static class SeedeStarter implements Runnable {
          BoardMetrics.noteCommand("BICEX","BubbleVisible");
          BoardUserReport.noteReport("seede");
          bubble_area.addBubble(eval_bubble,near_bubble,at_point,
-        			  BudaConstants.PLACEMENT_LOGICAL|BudaConstants.PLACEMENT_NEW|
-        			  BudaConstants.PLACEMENT_MOVETO|BudaConstants.PLACEMENT_USER);
+               BudaConstants.PLACEMENT_LOGICAL|BudaConstants.PLACEMENT_NEW|
+               BudaConstants.PLACEMENT_MOVETO|BudaConstants.PLACEMENT_USER);
        }
       else {
          if (for_process == null || !for_process.isRunning()) {
@@ -876,11 +876,11 @@ private static class SeedeStarter implements Runnable {
                setupBubble(new BicexEvaluationBubble(bev));
                Set<File> files;
                if (at_point == null && near_bubble != null) {
-        	  files = computeRegionFiles(bubble_area,near_bubble.getLocation());
-        	}
+                  files = computeRegionFiles(bubble_area,near_bubble.getLocation());
+                }
                else {
-        	  files = computeRegionFiles(bubble_area,at_point);
-        	}
+                  files = computeRegionFiles(bubble_area,at_point);
+                }
                if (!files.isEmpty()) be.addFiles(files);
                be.startContinuousExecution();
              }
@@ -893,7 +893,7 @@ private static class SeedeStarter implements Runnable {
              }
           }
        }
-    }
+   }
 
    private void setupBubble(BudaBubble bbl) {
       BudaBubble obbl = eval_bubble;
