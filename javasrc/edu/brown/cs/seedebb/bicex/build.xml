@@ -1,7 +1,6 @@
 <project name='seedebb.bicex' default='compile'>
 
    <property file='../../../../../../build.properties' />
-   <property name="UPRO" value='/research/people/spr' />
    <property name='PRO' value='/pro' />
    <property name='BUBBLES' value='/pro/bubbles' />
    <available file="${PRO}/ivy" type="dir" property="ivy.present" />
@@ -23,7 +22,7 @@
    </target>
 
    <target name='compile' depends='init'>
-      <javac srcdir='.' destdir='${UPRO}/seedebb/java' debug='on' deprecation='on'
+      <javac srcdir='.' destdir='${PRO}/seedebb/java' debug='on' deprecation='on'
 		includeantruntime='false'>
 	 <classpath refid='seedebb.classpath' />
 	 <compilerarg value='-Xlint:all' />
@@ -31,7 +30,7 @@
    </target>
 
    <target name='clean'>
-      <delete dir='${UPRO}/seedebb/java/edu/brown/cs/bubbles/bicex' />
+      <delete dir='${PRO}/seedebb/java/edu/brown/cs/bubbles/bicex' />
    </target>
 
    <target name='test' depends='compile'>

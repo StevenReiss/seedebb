@@ -1,9 +1,29 @@
 <project name='seedebb' default='all' >
 
+   <property file='build.properties' />
    <property name='PRO' value='/pro' />
-   <property name='BUBBLESLIB' value='${PRO}/bubbles/lib' />
+   <property name='IVYBIN' value='${PRO}/ivy/java' />
+   <property name='SEEDEBB' value='${PRO}/seedebb' />
+   <property name='BUBBLESBIN' value='${PRO}/bubbles/java' />
 
-   <target name='all'>
+   <available file="./build.properties" type='file' property='setup.done' />
+   <path id='setuppath'>
+      <pathelement location='..' />
+   </path>
+   <path id='seedepath'>
+      <pathelement location='.' />
+   </path>
+   <property name='setupfile' refid='setuppath' />
+   <property name='seedefile' refid='seedepath' />
+   <target name='setup' unless='setup.done'>
+      <echo file='./build.properties' message="PRO=${setupfile}${line.separator}" />
+      <echo file='./build.properties' message='SEEDEBB=${seedefile}${line.separator}' append='true' />
+      <mkdir dir='./java/edu/brown/cs/seedebb' />
+      <property name='PRO' value='{setupfile}' />
+      <property name='SEEDEBB' value='{seedefile}' />
+   </target>
+
+   <target name='all' depends='setup' >
       <ant antfile="build.xml" dir="javasrc" />
    </target>
 

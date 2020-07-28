@@ -1,7 +1,6 @@
 <project name='seedebb.brepair' default='compile'>
 
    <property file='../../../../../../build.properties' />
-   <property name='UPRO' value='/research/people/spr' />
    <property name='PRO' value='/pro' />
    <property name='BUBBLES' value='/pro/bubbles' />
    <available file="${PRO}/ivy" type="dir" property="ivy.present" />
@@ -13,19 +12,19 @@
    </target>
    <target name='init' depends='init1,init2' >
       <path id='seedebb.classpath'>
-	 <pathelement location='${UPRO}/seedebb/java' />
+	 <pathelement location='${PRO}/seedebb/java' />
 	 <pathelement location='${BUBBLES}/java' />
 	 <pathelement location='${IVYBIN}' />
       </path>
       <path id='test.classpath'>
-	 <pathelement location='${UPRO}/seedebb/java' />
+	 <pathelement location='${PRO}/seedebb/java' />
 	 <pathelement location='${BUBBLES}/java' />
 	 <pathelement location='${IVYBIN}' />
       </path>
    </target>
 
    <target name='compile' depends='init'>
-      <javac srcdir='.' destdir='${UPRO}/seedebb/java' debug='on' deprecation='on'
+      <javac srcdir='.' destdir='${PRO}/seedebb/java' debug='on' deprecation='on'
 		includeantruntime='false'>
 	 <classpath refid='seedebb.classpath' />
 	 <compilerarg value='-Xlint:all' />

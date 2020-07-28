@@ -1,8 +1,11 @@
 <project name='seedebb' default='all' >
 
+   <property file='../build.properties' />
    <property name='PRO' value='/research' />
-   <property name='IVYBIN' value='/research/ivy/java' />
-   <property name='SEEDE' value='/research/people/spr/seede' />
+   <property name='IVYBIN' value='${PRO}/ivy/java' />
+   <property name='SEEDEBB' value='${PRO}/seedebb' />
+   <property name='BUBBLESBIN' value='${PRO}/bubbles/java' />
+   <property name='SEEDE' value='${PRO}/seede' />
 
    <target name='all'>
       <ant antfile="build.xml" dir="edu/brown/cs/seedebb/bicex" />
