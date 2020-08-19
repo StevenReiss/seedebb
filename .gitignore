@@ -106,3 +106,4 @@ lib/firewall.jar
 **/engine/*solution
 **/engine/sources
 **/engine/test.y
+build.properties

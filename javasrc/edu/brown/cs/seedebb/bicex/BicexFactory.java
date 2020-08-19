@@ -590,34 +590,7 @@ private void startSeede()
 	    String elt = tok.nextToken();
 	    if (!elt.startsWith("/") &&  !elt.startsWith("\\")) {
 	       if (elt.equals("eclipsejar")) {
-		  String ejp = setup.getLibraryPath(elt);
-		  File ejr = new File(ejp);
-		  int fnd = 0;
-		  if (ejr.exists() && ejr.isDirectory()) {
-		     for (File nfil : ejr.listFiles()) {
-			if (nfil.getName().startsWith("org.eclipse.") && nfil.getName().endsWith(".jar")) {
-			   if (buf.length() > 0) buf.append(File.pathSeparator);
-			   buf.append(nfil.getPath());
-			   ++fnd;
-			}
-		     }
-		   }
-		  if (fnd == 0) {
-		     File f1 = ejr.getParentFile().getParentFile();	// /pro/bubbles/lib --> /pro
-		     File f2 = new File(f1,"ivy");                      // /pro/ivy
-		     File f3 = new File(f2,"lib");                      // /pro/ivy/lib
-		     File f4 = new File(f3,"eclipsejar");
-		     if (f4.exists() && f4.isDirectory()) {
-			for (File nfil : f4.listFiles()) {
-			   if (nfil.getName().startsWith("org.eclipse.") && nfil.getName().endsWith(".jar")) {
-			      if (buf.length() > 0) buf.append(File.pathSeparator);
-			      buf.append(nfil.getPath());
-			      ++fnd;
-			    }
-			 }
-		      }
-		   }
-		  continue;
+                  elt = getEclipsePath();
 		}
 	       else if (elt.equals("seede.jar") && jarfile != null) {
 		  elt = jarfile.getPath();
@@ -678,6 +651,57 @@ private void startSeede()
 	 BoardLog.logE("BICEX","Unable to start seede server: " + args);
        }
     }
+}
+
+
+
+private String getEclipsePath()
+{
+   StringBuffer buf = new StringBuffer();
+   int fnd = 0;
+   BoardSetup setup = BoardSetup.getSetup();
+   String ejp = setup.getLibraryPath("eclipsejar");
+   File ejr = new File(ejp);
+   if (ejr.exists() && ejr.isDirectory()) {
+      for (File nfil : ejr.listFiles()) {
+         if (nfil.getName().startsWith("org.eclipse.") && nfil.getName().endsWith(".jar")) {
+            if (fnd > 0) buf.append(File.pathSeparator);
+            buf.append(nfil.getPath());
+            ++fnd;
+          }
+       }
+    }
+   if (fnd == 0) {
+      File f1 = ejr.getParentFile().getParentFile();	// /pro/bubbles/lib --> /pro
+      File f2 = new File(f1,"ivy");                      // /pro/ivy
+      File f3 = new File(f2,"lib");                      // /pro/ivy/lib
+      File f4 = new File(f3,"eclipsejar");
+      if (f4.exists() && f4.isDirectory()) {
+         for (File nfil : f4.listFiles()) {
+            if (nfil.getName().startsWith("org.eclipse.") && nfil.getName().endsWith(".jar")) {
+               if (fnd > 0) buf.append(File.pathSeparator);
+               buf.append(nfil.getPath());
+               ++fnd;
+             }
+          }
+       }
+    }
+   if (fnd == 0) {
+      String xcp = System.getProperty("java.class.path");
+      StringTokenizer ptok = new StringTokenizer(xcp,File.pathSeparator);
+      while (ptok.hasMoreTokens()) {
+         String pelt = ptok.nextToken().trim();
+         if (pelt.contains("org.eclipse.")) {
+            if (fnd > 0) buf.append(File.pathSeparator);
+            buf.append(pelt);
+            ++fnd;
+          }
+       }
+    }
+   
+   if (fnd == 0) return null;
+   
+   return buf.toString();
 }
 
 
@@ -872,43 +896,43 @@ private static class SeedeStarter implements Runnable {
 
    @Override public void run() {
       if (eval_bubble != null) {
-	 // running in Swing thread
-	 BoardMetrics.noteCommand("BICEX","BubbleVisible");
-	 BoardUserReport.noteReport("seede");
-	 bubble_area.addBubble(eval_bubble,near_bubble,at_point,
-	       BudaConstants.PLACEMENT_LOGICAL|BudaConstants.PLACEMENT_NEW|
-	       BudaConstants.PLACEMENT_MOVETO|BudaConstants.PLACEMENT_USER);
+         // running in Swing thread
+         BoardMetrics.noteCommand("BICEX","BubbleVisible");
+         BoardUserReport.noteReport("seede");
+         bubble_area.addBubble(eval_bubble,near_bubble,at_point,
+               BudaConstants.PLACEMENT_LOGICAL|BudaConstants.PLACEMENT_NEW|
+               BudaConstants.PLACEMENT_MOVETO|BudaConstants.PLACEMENT_USER);
        }
       else {
-	 if (for_process == null || !for_process.isRunning()) {
-	    setupBubble(new BudaErrorBubble("No running process available for continuous evaluation"));
-	    BowiFactory.stopTask();
-	  }
-	 else {
-	    try {
-	       the_factory.startSeede();
-	       BicexExecution be = new BicexExecution(for_process);
-	       the_factory.exec_map.put(be.getExecId(),be);
-	       BicexEvaluationViewer bev = new BicexEvaluationViewer(be);
-	       setupBubble(new BicexEvaluationBubble(bev));
-	       Set<File> files;
-	       if (at_point == null && near_bubble != null) {
-		  files = computeRegionFiles(bubble_area,near_bubble.getLocation());
-		}
-	       else {
-		  files = computeRegionFiles(bubble_area,at_point);
-		}
-	       if (!files.isEmpty()) be.addFiles(files);
-	       be.startContinuousExecution();
-	     }
-	    catch (BicexException e) {
-	       BoardLog.logE("BICEX","Problem starting SEEDE: " + e.getMessage(),e);
-	       setupBubble(new BudaErrorBubble("Problem starting SEEDE"));
-	     }
-	    finally {
-	       BowiFactory.stopTask();
-	     }
-	  }
+         if (for_process == null || !for_process.isRunning()) {
+            setupBubble(new BudaErrorBubble("No running process available for continuous evaluation"));
+            BowiFactory.stopTask();
+          }
+         else {
+            try {
+               the_factory.startSeede();
+               BicexExecution be = new BicexExecution(for_process);
+               the_factory.exec_map.put(be.getExecId(),be);
+               BicexEvaluationViewer bev = new BicexEvaluationViewer(be);
+               setupBubble(new BicexEvaluationBubble(bev));
+               Set<File> files;
+               if (at_point == null && near_bubble != null) {
+        	  files = computeRegionFiles(bubble_area,near_bubble.getLocation());
+        	}
+               else {
+        	  files = computeRegionFiles(bubble_area,at_point);
+        	}
+               if (!files.isEmpty()) be.addFiles(files);
+               be.startContinuousExecution();
+             }
+            catch (BicexException e) {
+               BoardLog.logE("BICEX","Problem starting SEEDE: " + e.getMessage(),e);
+               setupBubble(new BudaErrorBubble("Problem starting SEEDE"));
+             }
+            finally {
+               BowiFactory.stopTask();
+             }
+          }
        }
    }
 
