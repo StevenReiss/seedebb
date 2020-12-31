@@ -686,6 +686,7 @@ private void fixupProjects()
 	 Element delpath = null;
 	 Element opxml = bc.getProjectData(pnm,false,true,false,false,false);
 	 if (opxml != null) {
+	    BoardLog.logD("BICEX","Project data: " + IvyXml.convertXmlToString(opxml));
 	    Element cpe = IvyXml.getChild(opxml,"CLASSPATH");
 	    for (Element rpe : IvyXml.children(cpe,"PATH")) {
 	       String bn = null;
@@ -708,6 +709,7 @@ private void fixupProjects()
 		}
 	       if (bn.contains("seede")) haveseede = true;
 	     }
+	
 	    if (haveseede && !havepoppy) {
 	       opxml = bc.getProjectData(pnm,false,false,true,false,false);
 	       Element cp = IvyXml.getChild(cpe,"CLASSES");
