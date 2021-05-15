@@ -126,6 +126,9 @@ BicexExecution(BumpProcess bp) throws BicexException
 
    Element rslt = sendSeedeMessage("BEGIN",args,null);
    if (!IvyXml.isElement(rslt,"RESULT")) throw new BicexException("Failed to create session");
+   Element sess = IvyXml.getChild(rslt,"SESSION");
+   String sid = IvyXml.getAttrString(sess,"ID");
+   if (sid != null) exec_id = sid;
 }
 
 

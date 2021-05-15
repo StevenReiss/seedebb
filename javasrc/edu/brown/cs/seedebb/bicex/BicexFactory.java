@@ -577,29 +577,31 @@ private void startSeede()
 
       args.add("-cp");
       String xcp = bp.getProperty("Bicex.seede.class.path");
+      BoardLog.logD("BICEX","Work on seede class path " + xcp);
       if (xcp == null) {
 	 xcp = System.getProperty("java.class.path");
 	 String ycp = bp.getProperty("Bicex.seede.add.path");
 	 if (ycp != null) xcp = ycp + File.pathSeparator + xcp;
        }
       else {
-	 BoardSetup setup = BoardSetup.getSetup();
 	 StringBuffer buf = new StringBuffer();
 	 StringTokenizer tok = new StringTokenizer(xcp,":;");
 	 while (tok.hasMoreTokens()) {
 	    String elt = tok.nextToken();
+	    BoardLog.logD("BIXEX","Classpath element " + elt);
 	    if (!elt.startsWith("/") &&  !elt.startsWith("\\")) {
 	       if (elt.equals("eclipsejar")) {
-		  elt = setup.getEclipsePath();
+		  elt = bs.getEclipsePath();
 		}
 	       else if (elt.equals("seede.jar") && jarfile != null) {
 		  elt = jarfile.getPath();
 		}
 	       else {
-		  elt = setup.getLibraryPath(elt);
+		  elt = bs.getLibraryPath(elt);
 		}
 	     }
 	    if (buf.length() > 0) buf.append(File.pathSeparator);
+	    BoardLog.logD("BICEX","Add element " + elt);
 	    buf.append(elt);
 	  }
 	 xcp = buf.toString();
@@ -709,7 +711,7 @@ private void fixupProjects()
 		}
 	       if (bn.contains("seede")) haveseede = true;
 	     }
-	
+
 	    if (haveseede && !havepoppy) {
 	       opxml = bc.getProjectData(pnm,false,false,true,false,false);
 	       Element cp = IvyXml.getChild(cpe,"CLASSES");
@@ -847,43 +849,43 @@ private static class SeedeStarter implements Runnable {
 
    @Override public void run() {
       if (eval_bubble != null) {
-	 // running in Swing thread
-	 BoardMetrics.noteCommand("BICEX","BubbleVisible");
-	 BoardUserReport.noteReport("seede");
-	 bubble_area.addBubble(eval_bubble,near_bubble,at_point,
-	       BudaConstants.PLACEMENT_LOGICAL|BudaConstants.PLACEMENT_NEW|
-	       BudaConstants.PLACEMENT_MOVETO|BudaConstants.PLACEMENT_USER);
+         // running in Swing thread
+         BoardMetrics.noteCommand("BICEX","BubbleVisible");
+         BoardUserReport.noteReport("seede");
+         bubble_area.addBubble(eval_bubble,near_bubble,at_point,
+               BudaConstants.PLACEMENT_LOGICAL|BudaConstants.PLACEMENT_NEW|
+               BudaConstants.PLACEMENT_MOVETO|BudaConstants.PLACEMENT_USER);
        }
       else {
-	 if (for_process == null || !for_process.isRunning()) {
-	    setupBubble(new BudaErrorBubble("No running process available for continuous evaluation"));
-	    BowiFactory.stopTask();
-	  }
-	 else {
-	    try {
-	       the_factory.startSeede();
-	       BicexExecution be = new BicexExecution(for_process);
-	       the_factory.exec_map.put(be.getExecId(),be);
-	       BicexEvaluationViewer bev = new BicexEvaluationViewer(be);
-	       setupBubble(new BicexEvaluationBubble(bev));
-	       Set<File> files;
-	       if (at_point == null && near_bubble != null) {
-		  files = computeRegionFiles(bubble_area,near_bubble.getLocation());
-		}
-	       else {
-		  files = computeRegionFiles(bubble_area,at_point);
-		}
-	       if (!files.isEmpty()) be.addFiles(files);
-	       be.startContinuousExecution();
-	     }
-	    catch (BicexException e) {
-	       BoardLog.logE("BICEX","Problem starting SEEDE: " + e.getMessage(),e);
-	       setupBubble(new BudaErrorBubble("Problem starting SEEDE"));
-	     }
-	    finally {
-	       BowiFactory.stopTask();
-	     }
-	  }
+         if (for_process == null || !for_process.isRunning()) {
+            setupBubble(new BudaErrorBubble("No running process available for continuous evaluation"));
+            BowiFactory.stopTask();
+          }
+         else {
+            try {
+               the_factory.startSeede();
+               BicexExecution be = new BicexExecution(for_process);
+               the_factory.exec_map.put(be.getExecId(),be);
+               BicexEvaluationViewer bev = new BicexEvaluationViewer(be);
+               setupBubble(new BicexEvaluationBubble(bev));
+               Set<File> files;
+               if (at_point == null && near_bubble != null) {
+        	  files = computeRegionFiles(bubble_area,near_bubble.getLocation());
+        	}
+               else {
+        	  files = computeRegionFiles(bubble_area,at_point);
+        	}
+               if (!files.isEmpty()) be.addFiles(files);
+               be.startContinuousExecution();
+             }
+            catch (BicexException e) {
+               BoardLog.logE("BICEX","Problem starting SEEDE: " + e.getMessage(),e);
+               setupBubble(new BudaErrorBubble("Problem starting SEEDE"));
+             }
+            finally {
+               BowiFactory.stopTask();
+             }
+          }
        }
    }
 
