@@ -596,7 +596,7 @@ private class SetInitialValueAction extends AbstractAction {
       if (variable_slot == null) return;
       BoardMetrics.noteCommand("BICEX","SetInitialValue");
       String threadid = getExecution().getEvaluation().getThreadForContext(getContext());
-      String expr = JOptionPane.showInputDialog(BicexViewerPanel.this,"Intial value");
+      String expr = JOptionPane.showInputDialog(BicexViewerPanel.this,"Initial value");
       if (expr == null) return;
       expr = expr.trim();
       if (expr.length() == 0) return;
@@ -605,7 +605,7 @@ private class SetInitialValueAction extends AbstractAction {
       xw.cdataElement("EXPR",expr);
       getExecution().sendSeedeMessage("SETVALUE",args,xw.toString());
       xw.close();
-
+   
     }
 
 }	// end of inner class AbstractAction
