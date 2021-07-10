@@ -274,121 +274,121 @@ static class DrawCommand extends GraphicsCommand {
    @Override void paint(Graphics2D g,GraphicsData gd) {
       BoardLog.logD("BICEX","DRAW " + draw_type + " " + g.getClipBounds());
       switch (draw_type) {
-	 case CLEAR_RECT :
-	    g.clearRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
-	    break;
-	 case COPY_AREA :
-	    g.copyArea(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3),
-		  getIntArg(4),getIntArg(5));
-	    break;
-	 case DRAW :
-	    g.draw((Shape) command_args.get(0));
-	    break;
-	 case DRAW_ARC :
-	    g.drawArc(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3),
-		  getIntArg(4),getIntArg(5));
-	    break;
-	 case DRAW_OVAL :
-	    g.drawOval(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
-	    break;
-	 case DRAW_LINE :
-	    g.drawLine(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
-	    break;
-	 case DRAW_RECT :
-	    g.drawRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
-	    break;
-	 case DRAW_3D_RECT :
-	    g.draw3DRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3),
-		  getBooleanArg(4));
-	    break;
-	 case DRAW_ROUND_RECT :
-	    g.drawRoundRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3),
-		  getIntArg(4),getIntArg(5));
-	    break;
-	 case DRAW_STRING :
-	    g.drawString(getStringArg(0),getFloatArg(1),getFloatArg(2));
-	    break;
-	 case FILL :
-	    g.fill((Shape) command_args.get(0));
-	    break;
-	 case FILL_ARC :
-	    g.fillArc(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3),
-		  getIntArg(4),getIntArg(5));
-	    break;
-	 case FILL_OVAL :
-	    g.fillOval(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
-	    break;
-	 case FILL_RECT :
-	    g.fillRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
-	    break;
-	 case FILL_ROUND_RECT :
-	    g.fillRoundRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3),
-		  getIntArg(4),getIntArg(5));
-	    break;
-	 case FILL_3D_RECT :
-	    g.fill3DRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3),
-		  getBooleanArg(4));
-	    break;
-
-	 case DRAW_GLYPH_VECTOR :
-	 case DRAW_IMAGE :
-	 case DRAW_POLYGON :
-	 case DRAW_POLYLINE :
-	 case DRAW_RENDERABLE_IMAGE :
-	 case DRAW_RENDERED_IMAGE :
-	 case FILL_POLYGON :
-	 case NONE :
-	    break;
-
-	 case ROTATE :
-	    if (command_args.size() == 1) {
-	       g.rotate(getDoubleArg(0));
-	     }
-	    else {
-	       g.rotate(getDoubleArg(0),getDoubleArg(1),getDoubleArg(2));
-	     }
-	    break;
-	 case SCALE :
-	    g.scale(getDoubleArg(0),getDoubleArg(1));
-	    break;
-	 case SHEAR :
-	    g.shear(getDoubleArg(0),getDoubleArg(1));
-	    break;
-	 case TRANSFORM :
-	    g.transform((AffineTransform) command_args.get(0));
-	    break;
-	 case TRANSLATE :
-	    g.translate(getDoubleArg(0),getDoubleArg(1));
-	    break;
-	 case CONSTRAIN :
-	    // want to do this at the top level using actual bounds for this display
-	    try {
-	       Class<?> clz = g.getClass();
-	       Method mthd = clz.getMethod("constrain", int.class,int.class,int.class,int.class);
-	       mthd.invoke(g, getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
-	    }
-	    catch (Throwable t) {
-	       System.err.println("CHECK: " + t);
-	    }
-	    break;
-	 case GET_TRANSFORM :
-	 case SET_TRANSFORM :
-	    break;
-	
-	 case CLIP_RECT :
-	    g.clipRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
-	    break;
-	 case CLIP :
-	    g.clip((Shape) command_args.get(0));
-	    break;
-	 case SET_CLIP :
-	    if (command_args.size() == 1) {
-	       g.setClip((Shape) command_args.get(0));
-	     }
-	    else {
-	       g.setClip(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
-	     }
-	    break;
+         case CLEAR_RECT :
+            g.clearRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
+            break;
+         case COPY_AREA :
+            g.copyArea(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3),
+        	  getIntArg(4),getIntArg(5));
+            break;
+         case DRAW :
+            g.draw((Shape) command_args.get(0));
+            break;
+         case DRAW_ARC :
+            g.drawArc(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3),
+        	  getIntArg(4),getIntArg(5));
+            break;
+         case DRAW_OVAL :
+            g.drawOval(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
+            break;
+         case DRAW_LINE :
+            g.drawLine(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
+            break;
+         case DRAW_RECT :
+            g.drawRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
+            break;
+         case DRAW_3D_RECT :
+            g.draw3DRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3),
+        	  getBooleanArg(4));
+            break;
+         case DRAW_ROUND_RECT :
+            g.drawRoundRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3),
+        	  getIntArg(4),getIntArg(5));
+            break;
+         case DRAW_STRING :
+            g.drawString(getStringArg(0),getFloatArg(1),getFloatArg(2));
+            break;
+         case FILL :
+            g.fill((Shape) command_args.get(0));
+            break;
+         case FILL_ARC :
+            g.fillArc(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3),
+        	  getIntArg(4),getIntArg(5));
+            break;
+         case FILL_OVAL :
+            g.fillOval(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
+            break;
+         case FILL_RECT :
+            g.fillRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
+            break;
+         case FILL_ROUND_RECT :
+            g.fillRoundRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3),
+        	  getIntArg(4),getIntArg(5));
+            break;
+         case FILL_3D_RECT :
+            g.fill3DRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3),
+        	  getBooleanArg(4));
+            break;
+   
+         case DRAW_GLYPH_VECTOR :
+         case DRAW_IMAGE :
+         case DRAW_POLYGON :
+         case DRAW_POLYLINE :
+         case DRAW_RENDERABLE_IMAGE :
+         case DRAW_RENDERED_IMAGE :
+         case FILL_POLYGON :
+         case NONE :
+            break;
+   
+         case ROTATE :
+            if (command_args.size() == 1) {
+               g.rotate(getDoubleArg(0));
+             }
+            else {
+               g.rotate(getDoubleArg(0),getDoubleArg(1),getDoubleArg(2));
+             }
+            break;
+         case SCALE :
+            g.scale(getDoubleArg(0),getDoubleArg(1));
+            break;
+         case SHEAR :
+            g.shear(getDoubleArg(0),getDoubleArg(1));
+            break;
+         case TRANSFORM :
+            g.transform((AffineTransform) command_args.get(0));
+            break;
+         case TRANSLATE :
+            g.translate(getDoubleArg(0),getDoubleArg(1));
+            break;
+         case CONSTRAIN :
+            // want to do this at the top level using actual bounds for this display
+            try {
+               Class<?> clz = g.getClass();
+               Method mthd = clz.getMethod("constrain", int.class,int.class,int.class,int.class);
+               mthd.invoke(g, getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
+            }
+            catch (Throwable t) {
+               System.err.println("CHECK: " + t);
+            }
+            break;
+         case GET_TRANSFORM :
+         case SET_TRANSFORM :
+            break;
+        
+         case CLIP_RECT :
+            g.clipRect(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
+            break;
+         case CLIP :
+            g.clip((Shape) command_args.get(0));
+            break;
+         case SET_CLIP :
+            if (command_args.size() == 1) {
+               g.setClip((Shape) command_args.get(0));
+             }
+            else {
+               g.setClip(getIntArg(0),getIntArg(1),getIntArg(2),getIntArg(3));
+             }
+            break;
        }
     }
 
