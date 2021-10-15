@@ -36,6 +36,7 @@ import edu.brown.cs.bubbles.buda.BudaRoot;
 
 import javax.swing.AbstractAction;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
@@ -139,7 +140,7 @@ private static class FixFailureAction extends AbstractAction {
 
    @Override public void actionPerformed(ActionEvent e) {
       BrepairTestFixer fixer = new BrepairTestFixer(near_bubble,test_case);
-      BoardThreadPool.start(fixer);
+      SwingUtilities.invokeLater(fixer);
     }
 
 }	// end of inner class FixFailureAction
