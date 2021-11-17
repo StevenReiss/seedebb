@@ -28,7 +28,6 @@ import edu.brown.cs.bubbles.batt.BattConstants;
 import edu.brown.cs.bubbles.batt.BattConstants.BattTest;
 import edu.brown.cs.bubbles.batt.BattFactory;
 import edu.brown.cs.bubbles.board.BoardSetup;
-import edu.brown.cs.bubbles.board.BoardThreadPool;
 import edu.brown.cs.bubbles.buda.BudaBubble;
 import edu.brown.cs.bubbles.buda.BudaConstants.BubbleViewCallback;
 import edu.brown.cs.bubbles.buda.BudaConstants.BudaWorkingSet;
