@@ -483,7 +483,6 @@ private void handleEditorAdded(BudaBubble bw)
    for (BicexExecution bex : exec_map.values()) {
       bex.handleEditorAdded(bw);
     }
-
 }
 
 
@@ -1062,10 +1061,27 @@ private static class ViewListener implements BubbleViewCallback {
    @Override public void bubbleAdded(BudaBubble bb) {
       File f = bb.getContentFile();
       if (f == null) return;
-      BicexFactory.getFactory().handleEditorAdded(bb);
+      ViewUpdater vu = new ViewUpdater(bb);
+      BoardThreadPool.start(vu);
+//    BicexFactory.getFactory().handleEditorAdded(bb);
     }
+   
+}       // end of innter class ViewListener
 
-}
+
+private static class ViewUpdater implements Runnable {
+   
+   private BudaBubble buda_bubble;
+   
+   ViewUpdater(BudaBubble bb) {
+      buda_bubble = bb;
+    }
+   
+   @Override public void run() {
+      BicexFactory.getFactory().handleEditorAdded(buda_bubble);
+    }
+   
+}       // end of inner class ViewUpdater
 
 
 /********************************************************************************/
