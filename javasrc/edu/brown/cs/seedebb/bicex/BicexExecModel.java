@@ -113,9 +113,6 @@ List<BumpStackFrame> getActiveFrames(BumpProcess bp)
 /*										*/
 /********************************************************************************/
 
-@Override public void handleLaunchEvent(BumpRunEvent evt)	{ }
-
-
 @Override public void handleProcessEvent(BumpRunEvent evt)
 {
    switch (evt.getEventType()) {
@@ -156,10 +153,6 @@ List<BumpStackFrame> getActiveFrames(BumpProcess bp)
 	 break;
     }
 }
-
-
-@Override public void handleConsoleMessage(BumpProcess p,boolean e,boolean f,String msg)
-{ }
 
 
 

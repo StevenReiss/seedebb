@@ -25,6 +25,7 @@
 
    <target name='compile' depends='init'>
       <javac srcdir='.' destdir='${PRO}/seedebb/java' debug='on' deprecation='on'
+		target='10' source='10'
 		includeantruntime='false'>
 	 <classpath refid='seedebb.classpath' />
 	 <compilerarg value='-Xlint:all' />
