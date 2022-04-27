@@ -306,7 +306,7 @@ private void checkExpandNode(TreePath tp,TreeNode vn)
 
 private class ValueTable extends SwingTreeTable {
 
-   private CellDrawer [] cell_drawer;
+   private transient CellDrawer [] cell_drawer;
 
    private static final long serialVersionUID = 1;
 
@@ -583,7 +583,7 @@ private class UserSelection implements ListSelectionListener {
 
 private class SetInitialValueAction extends AbstractAction {
 
-   private BicexDataModel.AbstractNode variable_slot;
+   private transient BicexDataModel.AbstractNode variable_slot;
 
    private static final long serialVersionUID = 1;
 
@@ -614,7 +614,7 @@ private class SetInitialValueAction extends AbstractAction {
 
 private class CreateGraphicsAction extends AbstractAction {
 
-   private BicexDataModel.AbstractNode variable_slot;
+   private transient BicexDataModel.AbstractNode variable_slot;
 
    private static final long serialVersionUID = 1;
 
@@ -639,8 +639,8 @@ private class CreateGraphicsAction extends AbstractAction {
 
 private class TraceVariableAction extends AbstractAction implements Runnable {
 
-   private BicexDataModel.AbstractNode variable_slot;
-   private BicexVarHistory var_history;
+   private transient BicexDataModel.AbstractNode variable_slot;
+   private transient BicexVarHistory var_history;
 
    private static final long serialVersionUID = 1;
 
@@ -668,7 +668,7 @@ private class TraceVariableAction extends AbstractAction implements Runnable {
 
 private class ExpandVariableAction extends AbstractAction {
 
-   private BicexDataModel.AbstractNode variable_slot;
+   private transient BicexDataModel.AbstractNode variable_slot;
 
    private static final long serialVersionUID = 1;
 

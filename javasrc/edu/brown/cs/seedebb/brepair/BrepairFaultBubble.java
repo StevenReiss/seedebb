@@ -86,14 +86,14 @@ class BrepairFaultBubble extends BudaBubble implements BrepairConstants
 /*										*/
 /********************************************************************************/
 
-private BattTest		failed_test;
-private BrepairCountData	count_data;
-private BrepairMethodTreeModel	tree_model;
-private BrepairSeedeManager	seede_manager;
+private transient BattTest	failed_test;
+private transient BrepairCountData count_data;
+private transient BrepairMethodTreeModel tree_model;
+private transient BrepairSeedeManager seede_manager;
 private FaultTree		fault_tree;
 private JComponent		execution_bubble;
-private Set<BicexResultContext> done_contexts;
-private List<RepairAnnotation>	active_annotations;
+private transient Set<BicexResultContext> done_contexts;
+private transient List<RepairAnnotation> active_annotations;
 private JButton 		correct_button;
 private JButton 		incorrect_button;
 
@@ -436,7 +436,7 @@ private class RefineAction implements ActionListener {
 
 private class ContextMarker extends AbstractAction {
 
-   private BicexResultContext for_context;
+   private transient BicexResultContext for_context;
    private boolean mark_pass;
 
    private static final long serialVersionUID = 1;

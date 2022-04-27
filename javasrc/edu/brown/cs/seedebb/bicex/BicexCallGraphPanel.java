@@ -184,10 +184,10 @@ private class Updater implements Runnable {
 
 private class CallGraph extends JPanel {
 
-   private PetalEditor		petal_editor;
-   private PetalModelDefault	petal_model;
-   private PetalLevelLayout	layout_method;
-   private Node 		current_node;
+   private PetalEditor	 	        petal_editor;
+   private transient PetalModelDefault	petal_model;
+   private transient PetalLevelLayout	layout_method;
+   private Node 		        current_node;
 
    private static final long serialVersionUID = 1;
 
@@ -313,7 +313,7 @@ private class Model extends PetalModelDefault {
 
 private class Node extends PetalNodeDefault {
 
-   private BicexEvaluationContext for_context;
+   private transient BicexEvaluationContext for_context;
 
    private static final long serialVersionUID = 1;
 

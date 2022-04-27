@@ -486,8 +486,8 @@ private class VarHistoryPanel extends BicexPanel {
 private class VarHistoryGraph extends JPanel {
 
    private PetalEditor	petal_editor;
-   private PetalModelDefault petal_model;
-   private PetalLayoutMethod layout_method;
+   private transient PetalModelDefault petal_model;
+   private transient PetalLayoutMethod layout_method;
 
    private static final long serialVersionUID = 1;
 
@@ -560,7 +560,7 @@ private class VarHistoryGraph extends JPanel {
 
 private class GraphNode extends PetalNodeDefault {
 
-   private VarNode for_node;
+   private transient VarNode for_node;
 
    private static final long serialVersionUID = 1;
 

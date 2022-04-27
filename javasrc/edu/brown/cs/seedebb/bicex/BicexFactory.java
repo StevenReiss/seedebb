@@ -1115,8 +1115,8 @@ private static class TestPopupHandler implements BattPopupHandler {
 private static class TestRunnerAction extends AbstractAction {
 
    private BudaBubble near_bubble;
-   private BattTest test_case;
-   private BumpProcess debug_process;
+   private transient BattTest test_case;
+   private transient BumpProcess debug_process;
 
    private static final long serialVersionUID = 1;
 

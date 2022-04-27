@@ -127,7 +127,7 @@ private static class TestPopupHandler implements BattConstants.BattPopupHandler 
 private static class FixFailureAction extends AbstractAction {
 
    private BudaBubble near_bubble;
-   private BattTest test_case;
+   private transient BattTest test_case;
 
    private static final long serialVersionUID = 1;
 

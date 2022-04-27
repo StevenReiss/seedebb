@@ -196,8 +196,8 @@ BicexLineGraphPanel(BicexEvaluationViewer ev)
 private class LineFlowGraph extends JPanel {
 
    private PetalEditor		petal_editor;
-   private PetalModelDefault	petal_model;
-   private PetalLayoutMethod	layout_method;
+   private transient PetalModelDefault petal_model;
+   private transient PetalLayoutMethod layout_method;
    private Node 		current_node;
 
    private static final long serialVersionUID = 1;

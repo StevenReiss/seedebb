@@ -167,8 +167,8 @@ private BicexEvaluationContext getContextForPosition(Point pt)
 
 private class StackPanel extends JPanel {
 
-   private BicexEvaluationContext time_context;
-   private Stroke highlight_stroke;
+   private transient BicexEvaluationContext time_context;
+   private transient Stroke highlight_stroke;
 
    private static final long serialVersionUID = 1;
 

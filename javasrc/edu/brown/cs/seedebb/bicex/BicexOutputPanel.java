@@ -227,8 +227,8 @@ private class Expander implements TreeExpansionListener, TreeModelListener, Runn
 
 private class OutputModel extends DefaultTreeModel {
 
-   private List<BicexOutputModel.FileData> file_data;
-   private TreeNode root_node;
+   private transient List<BicexOutputModel.FileData> file_data;
+   private transient TreeNode root_node;
 
    private static final long serialVersionUID = 1;
 

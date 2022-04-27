@@ -90,19 +90,19 @@ class BicexEvaluationViewer extends SwingGridPanel implements BicexConstants,
 /*										*/
 /********************************************************************************/
 
-private BicexExecution	for_execution;
+private transient BicexExecution for_execution;
 
-private BicexEvaluationContext	current_context;
-private BicexDataModel		data_model;
+private transient BicexEvaluationContext current_context;
+private transient BicexDataModel data_model;
 private JLabel			breadcrumb_box;
 private InnerLabel		inner_box;
 private JLabel			current_box;
 private JLabel			status_box;
 private BicexTimeScroller	time_scroller;
-private List<BicexPanel>	viewer_panels;
-private Map<String,BicexGraphicsPanel> graphics_panels;
+private transient List<BicexPanel> viewer_panels;
+private transient Map<String,BicexGraphicsPanel> graphics_panels;
 private JTabbedPane		tab_pane;
-private BicexPanel		history_panel;
+private transient BicexPanel    history_panel;
 private String			user_tab;
 private SwingEventListenerList<BicexPopupCallback> popup_listeners;
 
@@ -890,7 +890,7 @@ private class BreadcrumbLabel extends JLabel implements ClickLabel {
 
 private class InnerLabel extends JLabel implements ClickLabel {
 
-   private BicexEvaluationContext for_context;
+   private transient BicexEvaluationContext for_context;
 
    private static final long serialVersionUID = 1;
 
@@ -976,7 +976,7 @@ AbstractAction getSourceAction(BicexEvaluationContext ctx)
 
 private class GotoContextAction extends AbstractAction {
 
-   private BicexEvaluationContext target_context;
+   private transient BicexEvaluationContext target_context;
 
    private static final long serialVersionUID = 1;
 
@@ -1017,7 +1017,7 @@ private class GotoTimeAction extends AbstractAction {
 
 private class GotoContextTimeAction extends AbstractAction {
 
-   private BicexEvaluationContext target_context;
+   private transient BicexEvaluationContext target_context;
    private long target_time;
 
    private static final long serialVersionUID = 1;
@@ -1042,7 +1042,7 @@ private class GotoContextTimeAction extends AbstractAction {
 
 private class GotoSourceAction extends AbstractAction {
 
-   private BicexEvaluationContext target_context;
+   private transient BicexEvaluationContext target_context;
 
    private static final long serialVersionUID = 1;
 
