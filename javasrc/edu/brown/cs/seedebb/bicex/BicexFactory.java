@@ -161,8 +161,11 @@ public static void initialize(BudaRoot br)
       case REBUS :
 	 return;
       case JAVA :
+      case JAVA_IDEA :
 	 break;
     }
+
+   BoardLog.logD("BICEX","Start with language = " + BoardSetup.getSetup().getLanguage());
 
    getFactory().exec_model = new BicexExecModel();
    getFactory().fixupProjects();
@@ -178,6 +181,18 @@ public static void initialize(BudaRoot br)
       case SERVER :
 	 break;
     }
+   
+   BoardProperties bp = BoardProperties.getProperties("Bicex");
+   String opens = bp.getProperty("Bicex.seede.open");
+   BumpClient bc = BumpClient.getBump();
+   if (opens != null) {
+      for (StringTokenizer tok = new StringTokenizer(opens); tok.hasMoreTokens(); ) {
+         String open = tok.nextToken();
+         String arg = "--add-opens=" + open + "=ALL-UNNAMED";
+         bc.addJvmDebugArgument(arg);
+       }
+    }
+   
    // getFactory().startSeede();
 }
 
@@ -848,43 +863,43 @@ private static class SeedeStarter implements Runnable {
 
    @Override public void run() {
       if (eval_bubble != null) {
-         // running in Swing thread
-         BoardMetrics.noteCommand("BICEX","BubbleVisible");
-         BoardUserReport.noteReport("seede");
-         bubble_area.addBubble(eval_bubble,near_bubble,at_point,
-               BudaConstants.PLACEMENT_LOGICAL|BudaConstants.PLACEMENT_NEW|
-               BudaConstants.PLACEMENT_MOVETO|BudaConstants.PLACEMENT_USER);
+	 // running in Swing thread
+	 BoardMetrics.noteCommand("BICEX","BubbleVisible");
+	 BoardUserReport.noteReport("seede");
+	 bubble_area.addBubble(eval_bubble,near_bubble,at_point,
+	       BudaConstants.PLACEMENT_LOGICAL|BudaConstants.PLACEMENT_NEW|
+	       BudaConstants.PLACEMENT_MOVETO|BudaConstants.PLACEMENT_USER);
        }
       else {
-         if (for_process == null || !for_process.isRunning()) {
-            setupBubble(new BudaErrorBubble("No running process available for continuous evaluation"));
-            BowiFactory.stopTask();
-          }
-         else {
-            try {
-               the_factory.startSeede();
-               BicexExecution be = new BicexExecution(for_process);
-               the_factory.exec_map.put(be.getExecId(),be);
-               BicexEvaluationViewer bev = new BicexEvaluationViewer(be);
-               setupBubble(new BicexEvaluationBubble(bev));
-               Set<File> files;
-               if (at_point == null && near_bubble != null) {
-        	  files = computeRegionFiles(bubble_area,near_bubble.getLocation());
-        	}
-               else {
-        	  files = computeRegionFiles(bubble_area,at_point);
-        	}
-               if (!files.isEmpty()) be.addFiles(files);
-               be.startContinuousExecution();
-             }
-            catch (BicexException e) {
-               BoardLog.logE("BICEX","Problem starting SEEDE: " + e.getMessage(),e);
-               setupBubble(new BudaErrorBubble("Problem starting SEEDE"));
-             }
-            finally {
-               BowiFactory.stopTask();
-             }
-          }
+	 if (for_process == null || !for_process.isRunning()) {
+	    setupBubble(new BudaErrorBubble("No running process available for continuous evaluation"));
+	    BowiFactory.stopTask();
+	  }
+	 else {
+	    try {
+	       the_factory.startSeede();
+	       BicexExecution be = new BicexExecution(for_process);
+	       the_factory.exec_map.put(be.getExecId(),be);
+	       BicexEvaluationViewer bev = new BicexEvaluationViewer(be);
+	       setupBubble(new BicexEvaluationBubble(bev));
+	       Set<File> files;
+	       if (at_point == null && near_bubble != null) {
+		  files = computeRegionFiles(bubble_area,near_bubble.getLocation());
+		}
+	       else {
+		  files = computeRegionFiles(bubble_area,at_point);
+		}
+	       if (!files.isEmpty()) be.addFiles(files);
+	       be.startContinuousExecution();
+	     }
+	    catch (BicexException e) {
+	       BoardLog.logE("BICEX","Problem starting SEEDE: " + e.getMessage(),e);
+	       setupBubble(new BudaErrorBubble("Problem starting SEEDE"));
+	     }
+	    finally {
+	       BowiFactory.stopTask();
+	     }
+	  }
        }
    }
 
@@ -1065,23 +1080,23 @@ private static class ViewListener implements BubbleViewCallback {
       BoardThreadPool.start(vu);
 //    BicexFactory.getFactory().handleEditorAdded(bb);
     }
-   
-}       // end of innter class ViewListener
+
+}	// end of innter class ViewListener
 
 
 private static class ViewUpdater implements Runnable {
-   
+
    private BudaBubble buda_bubble;
-   
+
    ViewUpdater(BudaBubble bb) {
       buda_bubble = bb;
     }
-   
+
    @Override public void run() {
       BicexFactory.getFactory().handleEditorAdded(buda_bubble);
     }
-   
-}       // end of inner class ViewUpdater
+
+}	// end of inner class ViewUpdater
 
 
 /********************************************************************************/
