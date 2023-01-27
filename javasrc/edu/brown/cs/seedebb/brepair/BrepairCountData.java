@@ -100,6 +100,8 @@ void addCountData(BattTestCounts bcd,boolean pass)
 
 private void addCountData(BattTestCounts bcd,boolean pass,boolean force)
 {
+   if (bcd == null) return;
+
    if (pass) ++pass_total;
    else ++fail_total;
 
