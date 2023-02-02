@@ -369,6 +369,7 @@ public void gotoContext(JComponent bbl,BicexResultContext rctx)
     }
 
    if (bex != null) {
+      BoardLog.logD("BICEX","Goto context " + rctx.getMethod() + " " + rctx.getShortName());
       BicexEvaluationContext ctx = (BicexEvaluationContext) rctx;
       bex.setCurrentContext(ctx);
     }

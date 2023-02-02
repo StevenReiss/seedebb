@@ -33,6 +33,7 @@ import edu.brown.cs.seedebb.bicex.BicexConstants.BicexResultContext;
 import edu.brown.cs.seedebb.bicex.BicexConstants.BicexRunner;
 import edu.brown.cs.seedebb.bicex.BicexFactory;
 import edu.brown.cs.bubbles.board.BoardColors;
+import edu.brown.cs.bubbles.board.BoardLog;
 import edu.brown.cs.bubbles.board.BoardMetrics;
 import edu.brown.cs.bubbles.buda.BudaBubble;
 import edu.brown.cs.bubbles.buda.BudaBubbleArea;
@@ -414,17 +415,54 @@ private class RefineAction implements ActionListener {
 
    @Override public void actionPerformed(ActionEvent evt) {
       if (execution_bubble == null) return;
-      List<String> mthds = count_data.getSortedBlocks();
       BicexFactory bicex = BicexFactory.getFactory();
+      
+      String fmethod = null;
+      int fsline = 0;
+      int feline = 0;
+      if (fault_tree.getSelectionCount() > 0) {
+        TreePath tp = fault_tree.getSelectionPath();
+        String comp = (String) tp.getLastPathComponent();
+        if (comp.startsWith("Line ") || comp.startsWith("Lines ")) {
+           fmethod = (String) tp.getPathComponent(1);
+           if (comp.startsWith("Line ")) {
+              fsline = Integer.parseInt(comp.substring(5));
+              feline = fsline;
+            }
+           else {
+              comp = comp.substring(6);
+              int idx = comp.indexOf("-");
+              fsline = Integer.parseInt(comp.substring(0,idx));
+              feline = Integer.parseInt(comp.substring(idx+1));
+            }
+         }
+        else {
+           fmethod = comp;
+         }
+       }
+      
+      BoardLog.logD("BICEX","REFINE " + fault_tree.getSelectionCount() + " " +
+            fmethod + " " + fsline + " " + feline);
+      
+      List<String> mthds = count_data.getSortedBlocks();
+      
       for (String blk : mthds) {
-	 String [] args = blk.split("@");
-	 int sline = Integer.parseInt(args[1]);
-	 int eline = Integer.parseInt(args[2]);
-	 BicexResultContext ctx = bicex.findContext(execution_bubble,args[0],sline,eline);
-	 if (ctx == null) continue;
-	 if (done_contexts.contains(ctx)) continue;
-	 bicex.gotoContext(execution_bubble,ctx);
-	 break;
+         String [] args = blk.split("@");
+         int sline = Integer.parseInt(args[1]);
+         int eline = Integer.parseInt(args[2]);
+         BicexResultContext ctx = bicex.findContext(execution_bubble,args[0],sline,eline);
+         if (ctx == null) continue;
+         if (done_contexts.contains(ctx)) continue;     // ignore correct calls
+         
+         if (fmethod != null) {
+            if (!ctx.getMethod().equals(fmethod)) continue;
+            if (fsline != 0) {
+               if (fsline != sline || feline != eline) continue;
+             }
+          }
+         
+         bicex.gotoContext(execution_bubble,ctx);
+         break;
        }
     }
 
@@ -613,9 +651,9 @@ private class AnnotationAction extends AbstractAction {
       BumpLocation loc = bl.get(0);
       BaleFileOverview fov = BaleFactory.getFactory().getFileOverview(loc.getProject(),loc.getFile());
       for (int ln = from_line; ln <= to_line; ++ln) {
-	 RepairAnnotation ra = new RepairAnnotation(loc.getFile(),fov,ln);
-	 BaleFactory.getFactory().addAnnotation(ra);
-	 active_annotations.add(ra);
+         RepairAnnotation ra = new RepairAnnotation(loc.getFile(),fov,ln);
+         BaleFactory.getFactory().addAnnotation(ra);
+         active_annotations.add(ra);
        }
     }
 
@@ -690,38 +728,38 @@ private class Selector implements TreeSelectionListener {
       removeAnnotations();
       int ct = fault_tree.getSelectionCount();
       if (ct > 0) {
-	 for (TreePath tp : fault_tree.getSelectionPaths()) {
-	    String comp = (String) tp.getLastPathComponent();
-	    String method = null;
-	    int sline = 0;
-	    int eline = 0;
-	    if (comp.startsWith("Line ") || comp.startsWith("Lines ")) {
-	       method = (String) tp.getPathComponent(1);
-	       if (comp.startsWith("Line ")) {
-		  sline = Integer.parseInt(comp.substring(5));
-		  eline = sline;
-		}
-	       else {
-		  comp = comp.substring(6);
-		  int idx = comp.indexOf("-");
-		  sline = Integer.parseInt(comp.substring(0,idx));
-		  eline = Integer.parseInt(comp.substring(idx+1));
-		}
-	       AnnotationAction aa = new AnnotationAction("CLICK",method,sline,eline);
-	       aa.actionPerformed(null);
-	     }
-	  }
+         for (TreePath tp : fault_tree.getSelectionPaths()) {
+            String comp = (String) tp.getLastPathComponent();
+            String method = null;
+            int sline = 0;
+            int eline = 0;
+            if (comp.startsWith("Line ") || comp.startsWith("Lines ")) {
+               method = (String) tp.getPathComponent(1);
+               if (comp.startsWith("Line ")) {
+                  sline = Integer.parseInt(comp.substring(5));
+                  eline = sline;
+                }
+               else {
+                  comp = comp.substring(6);
+                  int idx = comp.indexOf("-");
+                  sline = Integer.parseInt(comp.substring(0,idx));
+                  eline = Integer.parseInt(comp.substring(idx+1));
+                }
+               AnnotationAction aa = new AnnotationAction("CLICK",method,sline,eline);
+               aa.actionPerformed(null);
+             }
+          }
        }
-
+      
       if (ct == 0) {
-	 correct_button.setEnabled(false);
-	 incorrect_button.setEnabled(false);
+         correct_button.setEnabled(false);
+         incorrect_button.setEnabled(false);
        }
       else {
-	 correct_button.setEnabled(true);
-	 incorrect_button.setEnabled(true);
+         correct_button.setEnabled(true);
+         incorrect_button.setEnabled(true);
        }
-    }
+   }
 
 }	// end of inner class Selector
 
