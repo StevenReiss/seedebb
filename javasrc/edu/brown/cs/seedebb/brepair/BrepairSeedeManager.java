@@ -49,7 +49,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 
-class BrepairSeedeManager implements BicexConstants
+class BrepairSeedeManager implements BicexConstants, BrepairConstants
 {
 
 

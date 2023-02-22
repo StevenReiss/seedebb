@@ -507,29 +507,29 @@ private class LineMarker extends AbstractAction {
      TreePath [] tps = fault_tree.getSelectionPaths();
      if (tps == null) return;
      for (TreePath tp : tps) {
-	String comp = (String) tp.getLastPathComponent();
-	String method = null;
-	int sline = 0;
-	int eline = 0;
-	if (comp.startsWith("Line ") || comp.startsWith("Lines ")) {
-	   method = (String) tp.getPathComponent(1);
-	   if (comp.startsWith("Line ")) {
-	      sline = Integer.parseInt(comp.substring(5));
-	      eline = sline;
-	    }
-	   else {
-	      comp = comp.substring(6);
-	      int idx = comp.indexOf("-");
-	      sline = Integer.parseInt(comp.substring(0,idx));
-	      eline = Integer.parseInt(comp.substring(idx+1));
-	    }
-	 }
-	else {
-	   method = comp;
-	 }
-	count_data.addUserFeedback(method,sline,eline,do_pass);
+        String comp = (String) tp.getLastPathComponent();
+        String method = null;
+        int sline = 0;
+        int eline = 0;
+        if (comp.startsWith("Line ") || comp.startsWith("Lines ")) {
+           method = (String) tp.getPathComponent(1);
+           if (comp.startsWith("Line ")) {
+              sline = Integer.parseInt(comp.substring(5));
+              eline = sline;
+            }
+           else {
+              comp = comp.substring(6);
+              int idx = comp.indexOf("-");
+              sline = Integer.parseInt(comp.substring(0,idx));
+              eline = Integer.parseInt(comp.substring(idx+1));
+            }
+         }
+        else {
+           method = comp;
+         }
+        count_data.addUserFeedback(method,sline,eline,do_pass);
       }
-
+   
      String tnm = failed_test.getClassName() + "." + failed_test.getMethodName() + "(";
      count_data.computeSortedMethods(tnm,MAX_METHODS,CUTOFF_VALUE);
      tree_model.countsUpdated();

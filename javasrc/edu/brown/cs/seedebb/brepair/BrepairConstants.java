@@ -51,6 +51,17 @@ String BREPAIR_TOP_COLOR_ID = "Brepair.TopColor";
 String BREPAIR_BOTTOM_COLOR_ID = "Brepair.BottomColor";
 
 
+
+/********************************************************************************/
+/*                                                                              */
+/*      Data flow result                                                        */
+/*                                                                              */
+/********************************************************************************/
+
+interface BrepairDataFlow { }
+
+
+
 }	// end of interface BrepairConstants
 
 

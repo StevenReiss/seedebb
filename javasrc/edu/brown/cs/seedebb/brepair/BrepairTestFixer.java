@@ -25,6 +25,11 @@
 package edu.brown.cs.seedebb.brepair;
 
 import edu.brown.cs.bubbles.batt.BattConstants.BattTest;
+import edu.brown.cs.bubbles.board.BoardLog;
+
+import java.io.File;
+import java.util.Set;
+
 import edu.brown.cs.bubbles.batt.BattFactory;
 import edu.brown.cs.bubbles.bowi.BowiFactory;
 import edu.brown.cs.bubbles.buda.BudaBubble;
@@ -44,7 +49,7 @@ class BrepairTestFixer implements BrepairConstants, Runnable
 
 private BattTest		failed_test;
 private BudaBubble		near_bubble;
-
+private BrepairFaitManager      fait_manager;
 
 
 
@@ -59,6 +64,7 @@ BrepairTestFixer(BudaBubble bbl,BattTest test)
 {
    near_bubble = bbl;
    failed_test = test;
+   fait_manager = null;
 }
 
 
@@ -110,9 +116,14 @@ private BrepairCountData setupFaultLocalizationData()
 	    break;
        }
     }
-
+   Set<File> files = counts.getRelevantFiles();
+   
+   fait_manager = new BrepairFaitManager(failed_test,files);
+   fait_manager.setup();
+   BrepairDataFlow bdf = fait_manager.getFaitResult(counts);
+   BoardLog.logD("BREPAIR","Fait data flow result: " + bdf);
+   
    String tnm = failed_test.getClassName() + "." + failed_test.getMethodName() + "(";
-
    counts.computeSortedMethods(tnm,MAX_METHODS,CUTOFF_VALUE);
 
    return counts;
