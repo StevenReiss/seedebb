@@ -27,6 +27,7 @@ package edu.brown.cs.seedebb.bicex;
 
 import edu.brown.cs.bubbles.bale.BaleFactory;
 import edu.brown.cs.bubbles.board.BoardColors;
+import edu.brown.cs.bubbles.board.BoardLog;
 import edu.brown.cs.bubbles.board.BoardMetrics;
 import edu.brown.cs.bubbles.board.BoardUserReport;
 import edu.brown.cs.bubbles.buda.BudaBubble;
@@ -125,6 +126,8 @@ BicexEvaluationViewer(BicexExecution be)
       current_context = be.getEvaluation().getRootContext();
     }
    else current_context = null;
+   
+   BoardLog.logD("BICEX","Evaluation viewer context: " + current_context);
 
    data_model = new BicexDataModel(be,current_context);
 
@@ -248,6 +251,8 @@ private BicexEvaluationContext findContext(BicexEvaluationContext ctx,String id,
    BicexExecution ex = (BicexExecution) er;
    current_context = ex.getCurrentContext();
    data_model.setContext(current_context);
+   
+   BoardLog.logD("BICEX","Evaluation viewer context update: " + current_context); 
 
    time_scroller.update();
    updateGraphicsPanels();

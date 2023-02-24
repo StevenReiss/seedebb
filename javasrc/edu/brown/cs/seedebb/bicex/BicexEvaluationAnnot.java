@@ -110,7 +110,10 @@ BicexEvaluationAnnot(BicexEvaluationViewer ev)
 
 private void checkAnnotation()
 {
-   if (getContext() == null) return;
+   if (getContext() == null) {
+      BoardLog.logD("BICEX","No context for annotations");
+      return;
+    }
    BicexValue lnv = getContext().getValues().get("*LINE*");
    if (lnv == null || getContext().getFileName() == null) {
       removeAnnotation();
@@ -124,6 +127,7 @@ private void checkAnnotation()
    if (lno != current_line || lno == 0) {
       removeAnnotation();
     }
+   BoardLog.logD("BICEX","LINE annotation at " + lno);
    if (lno > 0) {
       EvalAnnot ea = new EvalAnnot(lno);
       synchronized (this) {
