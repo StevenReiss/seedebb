@@ -127,7 +127,7 @@ private void checkAnnotation()
    if (lno != current_line || lno == 0) {
       removeAnnotation();
     }
-   BoardLog.logD("BICEX","LINE annotation at " + lno);
+   BoardLog.logD("BICEX","LINE annotation at " + lno + " " + getContext().getFileName());
    if (lno > 0) {
       EvalAnnot ea = new EvalAnnot(lno);
       synchronized (this) {
