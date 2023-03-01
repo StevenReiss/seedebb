@@ -182,15 +182,20 @@ public static void initialize(BudaRoot br)
 	 break;
     }
    
-   BoardProperties bp = BoardProperties.getProperties("Bicex");
-   String opens = bp.getProperty("Bicex.seede.open");
    BumpClient bc = BumpClient.getBump();
-   if (opens != null) {
-      for (StringTokenizer tok = new StringTokenizer(opens); tok.hasMoreTokens(); ) {
-         String open = tok.nextToken();
-         String arg = "--add-opens=" + open + "=ALL-UNNAMED";
-         bc.addJvmDebugArgument(arg);
+   BoardProperties bp = BoardProperties.getProperties("Bicex");
+   Set<String> openitems = new HashSet<>();
+   for (String s : bp.stringPropertyNames()) {
+      if (s.equals("Bicex.seede.open") || s.startsWith("Bicex.seede.open.")) {
+         String opens = bp.getProperty(s);
+         for (StringTokenizer tok = new StringTokenizer(opens); tok.hasMoreTokens(); ) {
+            openitems.add(tok.nextToken());
+          }
        }
+    }
+   for (String open : openitems) {
+      String arg = "--add-opens=" + open + "=ALL-UNNAMED";
+      bc.addJvmDebugArgument(arg);
     }
    
    // getFactory().startSeede();
