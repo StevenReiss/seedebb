@@ -39,7 +39,7 @@ Brepair.AnnotColor	:	255,255,0,128
 Brepair.TopColor	:	255,255,225
 Brepair.BottomColor	:	white
 Brepair.RepairAnnotColor :	yellow
-Brepair.SelectionColor	:	255,255,127
+Brepair.SelectionColor	:	128,255,255,127
 
 
 
