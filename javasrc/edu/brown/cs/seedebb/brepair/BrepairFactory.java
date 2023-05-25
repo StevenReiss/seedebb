@@ -69,6 +69,7 @@ public static void setup()			{ }
 public static void initialize(BudaRoot br)
 {
    switch (BoardSetup.getSetup().getLanguage()) {
+      default :
       case JS :
       case PYTHON :
       case REBUS :
