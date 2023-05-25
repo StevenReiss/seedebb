@@ -72,6 +72,7 @@ public static void initialize(BudaRoot br)
       case JS :
       case PYTHON :
       case REBUS :
+      case DART :
 	 return;
       case JAVA :
 	 break;
