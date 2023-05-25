@@ -124,6 +124,18 @@ private static BicexFactory	the_factory = new BicexFactory();
 
 public static void setup()
 {
+   switch (BoardSetup.getSetup().getLanguage()) {
+      default :
+      case JS :
+      case PYTHON :
+      case REBUS :
+      case DART :
+	 return;
+      case JAVA :
+      case JAVA_IDEA :
+	 break;
+    }
+
    File dirf =	BoardPluginManager.installResources(BicexFactory.class,"seede",new ResourceFilter());
    BicexFactory bf = BicexFactory.getFactory();
    if (dirf == null) {
