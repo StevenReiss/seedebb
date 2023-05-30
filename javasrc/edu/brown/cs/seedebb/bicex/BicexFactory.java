@@ -136,6 +136,8 @@ public static void setup()
 	 break;
     }
 
+   BoardLog.logD("BICEX","Start bicex for " + BoardSetup.getSetup().getLanguage());
+
    File dirf =	BoardPluginManager.installResources(BicexFactory.class,"seede",new ResourceFilter());
    BicexFactory bf = BicexFactory.getFactory();
    if (dirf == null) {
