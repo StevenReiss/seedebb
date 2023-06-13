@@ -115,6 +115,7 @@ void process()
 {
    addDependentNodes(start_node);
    if (history_panel == null) {
+      BoardLog.logD("BICEX","Create VarHistory panel");
       history_panel = new VarHistoryPanel();
       for_viewer.setHistoryPanel(history_panel);
     }
@@ -412,7 +413,7 @@ private static class VarNode {
       comes_from = null;
       other_data = null;
       BoardLog.logD("BICEX","Create DEPENDENCY " + ctx.getMethod() + " " + var +
-	    " " + at + " " + value);
+            " " + at + " " + value);
     }
 
    void addDependent(VarNode vn) {

@@ -651,6 +651,7 @@ private class TraceVariableAction extends AbstractAction implements Runnable {
     }
 
    @Override public void actionPerformed(ActionEvent evt) {
+      BoardLog.logD("BICEX","Compute var history for " + getNodeName(variable_slot));
       var_history = new BicexVarHistory(eval_viewer,
 	    variable_slot.getBicexValue(),
 	    getNodeName(variable_slot));
@@ -658,6 +659,7 @@ private class TraceVariableAction extends AbstractAction implements Runnable {
     }
 
    @Override public void run() {
+      BoardLog.logD("BICEX","Process var history");
       var_history.process();
       var_history = null;
     }
