@@ -132,7 +132,7 @@ public static void setup()
       case DART :
 	 return;
       case JAVA :
-      case JAVA_IDEA :
+      case JAVA_IDEA :						
 	 break;
     }
 
