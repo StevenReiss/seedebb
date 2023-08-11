@@ -334,7 +334,7 @@ private Element getVariableDependencies(String name,BicexEvaluationContext ctx,i
 	 "LINE",lno,
 	 "TIME",when,
 	 "CONTEXT",ctx.getId(),
-	 "VARAIBLE",name);
+	 "VARIABLE",name);
    Element rslt = for_viewer.getExecution().sendSeedeMessage("VARHISTORY",args,null);
    if (rslt == null) return null;
    if (IvyXml.getChild(rslt,"ERROR") != null) return null;
@@ -473,10 +473,10 @@ private class VarHistoryPanel extends BicexPanel {
       VarNode vn = gn.getVarNode();
       BicexEvaluationContext ctx = vn.getContext();
       if (ctx == null) return;
-
+   
       long when = vn.getTime();
       if (when > 0) {
-	 menu.add(getContextTimeAction("Go to " + ctx.getShortName(),ctx,when+1));
+         menu.add(getContextTimeAction("Go to " + ctx.getShortName(),ctx,when+1));
        }
       menu.add(getSourceAction(ctx));
     }
@@ -516,9 +516,9 @@ private class VarHistoryGraph extends JPanel {
    void update() {
       Map<VarNode,GraphNode> nodes = new HashMap<>();
       petal_model.clear();
-
+   
       addNodes(start_node,nodes);
-
+   
       petal_model.fireModelUpdated();
       petal_editor.commandLayout(layout_method);
       Dimension dim = petal_editor.getPreferredSize();
@@ -531,19 +531,19 @@ private class VarHistoryGraph extends JPanel {
    private GraphNode addNodes(VarNode vn,Map<VarNode,GraphNode> nodes) {
       GraphNode gn = nodes.get(vn);
       if (gn != null) return gn;
-
+   
       gn = new GraphNode(vn);
       nodes.put(vn,gn);
       petal_model.addNode(gn);
-
+   
       if (vn.getDependents() != null) {
-	 for (VarNode vn1 : vn.getDependents()) {
-	    GraphNode gn1 = addNodes(vn1,nodes);
-	    GraphArc ga = new GraphArc(gn,gn1);
-	    petal_model.addArc(ga);
-	  }
+         for (VarNode vn1 : vn.getDependents()) {
+            GraphNode gn1 = addNodes(vn1,nodes);
+            GraphArc ga = new GraphArc(gn,gn1);
+            petal_model.addArc(ga);
+          }
        }
-
+   
       return gn;
     }
 
