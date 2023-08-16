@@ -45,6 +45,8 @@ import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -394,70 +396,70 @@ static class DrawCommand extends GraphicsCommand {
 
    private Object decodeArg(Element xml) {
       switch (IvyXml.getAttrString(xml,"TYPE")) {
-	 case "int" :
-	    return Integer.valueOf(IvyXml.getAttrInt(xml,"VALUE",0));
-	 case "boolean" :
-	    return Boolean.valueOf(IvyXml.getAttrBool(xml,"VALUE"));
-	 case "float" :
-	    return Float.valueOf(IvyXml.getAttrFloat(xml,"VALUE",0));
-	 case "double" :
-	    return Double.valueOf(IvyXml.getAttrDouble(xml,"VALUE",0));
-	 case "byte[]" :
-	    break;
-	 case "char[]" :
-	    break;
-	 case "java.awt.Image" :
-	    break;
-	 case "java.awt.ImageObserver" :
-	    break;
-	 case "int[]" :
-	    break;
-	 case "java.text.AttributedCharacterIterator" :
-	    break;
-	 case "java.lang.String" :
-	    return IvyXml.getTextElement(xml,"VALUE");
-	 case "java.awt.font.GlyphVector" :
-	    break;
-	 case "java.awt.image.BufferedImage" :
-	    break;
-	 case "java.awt.geom.AffineTransform" :
-	    Element telt = IvyXml.getChild(xml,"TRANSFORM");
-	    if (telt == null) telt = xml;
-	    return new AffineTransform(IvyXml.getAttrDouble(telt,"M00"),
-		     IvyXml.getAttrDouble(telt,"M10"),
-		     IvyXml.getAttrDouble(telt,"M01"),
-		     IvyXml.getAttrDouble(telt,"M11"),
-		     IvyXml.getAttrDouble(telt,"M02"),
-		     IvyXml.getAttrDouble(telt,"M12"));
-	 case "java.awt.Rectangle" :
-	    Element relt = IvyXml.getChild(xml,"RECT");
-	    if (relt == null) relt = xml;
-	    return new Rectangle(IvyXml.getAttrInt(relt,"X"),
-		  IvyXml.getAttrInt(relt,"Y"),
-		  IvyXml.getAttrInt(relt,"WIDTH"),
-		  IvyXml.getAttrInt(relt,"HEIGHT"));
-	 case "java.awt.image.renderable.RenderableImage" :
-	    break;
-	 case "java.awt.image.RenderedImage" :
-	    break;
-	 case "sun.awt.image.ToolkitImage" :
-	    switch (IvyXml.getAttrString(xml,"KIND")) {
-	       case "URL" :
-		  try {
-		     URL u = new URL(IvyXml.getAttrString(xml,"PROTOCOL"),
-			   IvyXml.getAttrString(xml,"HOST"),
-			   IvyXml.getAttrInt(xml,"PORT"),
-			   IvyXml.getAttrString(xml,"PATH"));
-		     ImageIcon icn = new ImageIcon(u);
-		     return icn.getImage();
-		   }
-		  catch (MalformedURLException e) { }
-		  break;
-	       default :
-		  break;
-	     }
-	    break;
-	 // need to handle other shapes
+         case "int" :
+            return Integer.valueOf(IvyXml.getAttrInt(xml,"VALUE",0));
+         case "boolean" :
+            return Boolean.valueOf(IvyXml.getAttrBool(xml,"VALUE"));
+         case "float" :
+            return Float.valueOf(IvyXml.getAttrFloat(xml,"VALUE",0));
+         case "double" :
+            return Double.valueOf(IvyXml.getAttrDouble(xml,"VALUE",0));
+         case "byte[]" :
+            break;
+         case "char[]" :
+            break;
+         case "java.awt.Image" :
+            break;
+         case "java.awt.ImageObserver" :
+            break;
+         case "int[]" :
+            break;
+         case "java.text.AttributedCharacterIterator" :
+            break;
+         case "java.lang.String" :
+            return IvyXml.getTextElement(xml,"VALUE");
+         case "java.awt.font.GlyphVector" :
+            break;
+         case "java.awt.image.BufferedImage" :
+            break;
+         case "java.awt.geom.AffineTransform" :
+            Element telt = IvyXml.getChild(xml,"TRANSFORM");
+            if (telt == null) telt = xml;
+            return new AffineTransform(IvyXml.getAttrDouble(telt,"M00"),
+        	     IvyXml.getAttrDouble(telt,"M10"),
+        	     IvyXml.getAttrDouble(telt,"M01"),
+        	     IvyXml.getAttrDouble(telt,"M11"),
+        	     IvyXml.getAttrDouble(telt,"M02"),
+        	     IvyXml.getAttrDouble(telt,"M12"));
+         case "java.awt.Rectangle" :
+            Element relt = IvyXml.getChild(xml,"RECT");
+            if (relt == null) relt = xml;
+            return new Rectangle(IvyXml.getAttrInt(relt,"X"),
+        	  IvyXml.getAttrInt(relt,"Y"),
+        	  IvyXml.getAttrInt(relt,"WIDTH"),
+        	  IvyXml.getAttrInt(relt,"HEIGHT"));
+         case "java.awt.image.renderable.RenderableImage" :
+            break;
+         case "java.awt.image.RenderedImage" :
+            break;
+         case "sun.awt.image.ToolkitImage" :
+            switch (IvyXml.getAttrString(xml,"KIND")) {
+               case "URL" :
+        	  try {
+        	     URL u = new URI(IvyXml.getAttrString(xml,"PROTOCOL"),null,
+        		   IvyXml.getAttrString(xml,"HOST"),
+        		   IvyXml.getAttrInt(xml,"PORT"),
+        		   IvyXml.getAttrString(xml,"PATH"),null,null).toURL();
+        	     ImageIcon icn = new ImageIcon(u);
+        	     return icn.getImage();
+        	   }
+        	  catch (MalformedURLException | URISyntaxException e) { }
+        	  break;
+               default :
+        	  break;
+             }
+            break;
+         // need to handle other shapes
        }
       return null;
     }
