@@ -31,6 +31,7 @@ import edu.brown.cs.bubbles.batt.BattFactory;
 import edu.brown.cs.seedebb.bicex.BicexConstants;
 import edu.brown.cs.seedebb.bicex.BicexException;
 import edu.brown.cs.seedebb.bicex.BicexFactory;
+import edu.brown.cs.bubbles.board.BoardLog;
 import edu.brown.cs.bubbles.board.BoardThreadPool;
 import edu.brown.cs.bubbles.buda.BudaBubble;
 import edu.brown.cs.bubbles.bump.BumpClient;
@@ -210,6 +211,9 @@ private void setupLaunch()
    createBreakpoint();
 
    createLaunch();
+   
+   BoardLog.logD("BREPAIR","Work on process " + debug_process);
+   if (debug_process == null) return;
 
    waitForBreak();
 
@@ -245,6 +249,7 @@ private void createLaunch()
 {
    BumpClient bc = BumpClient.getBump();
    debug_process = bc.startDebug(launch_config,null);
+   BoardLog.logD("BREPAIR","Create Launch " + debug_process + " " + launch_config);
 }
 
 
@@ -253,6 +258,7 @@ private void waitForBreak()
    BumpClient bc = BumpClient.getBump();
 
    for ( ; ; ) {
+      if (debug_process == null) return;
       boolean ready = false;
       boolean stopped = false;
       for (BumpThread bt : debug_process.getThreads()) {

@@ -213,30 +213,39 @@ private void setToString(boolean fg)
    Object v0 = value_table.getValueAt(row,-1);
    if (v0 == null) return;
    BicexDataModel.AbstractNode an = (BicexDataModel.AbstractNode) v0;
+   boolean prim = an.getChildCount() == 0;
    String name = an.getName();
-   if (name == null || name.startsWith("*")) return;
+   if (name == null) return;
+// if (name.startsWith("*")) return;
    BicexValue bv = an.getBicexValue();
    if (bv == null) return;
    long now = getExecution().getCurrentTime();
-   long prev = -1;
-   long next = -1;
-   long first = -1;
-   for (Integer t : bv.getTimeChanges()) {
-      if (first < 0) first = t;
-      if (t < now-1) prev = t;
-      else if (t > now && next < 0) next = t;
-    }
-   if (prev > 0) menu.add(getContextTimeAction("Go To Previous Set of " + name,null,prev+1));
-   if (next > 0) menu.add(getContextTimeAction("Go To Next Set of " + name,null,next+1));
+   if (!name.startsWith("*")) {
+      long prev = -1;
+      long next = -1;
+      long first = -1;
+      for (Integer t : bv.getTimeChanges()) {
+         if (first < 0) first = t;
+         if (t < now-1) prev = t;
+         else if (t > now && next < 0) next = t;
+       }
+      if (prev > 0) menu.add(getContextTimeAction("Go To Previous Set of " + name,null,prev+1));
+      if (next > 0) menu.add(getContextTimeAction("Go To Next Set of " + name,null,next+1));
 
-   boolean prim = an.getChildCount() == 0;
-   if (prev > 0 && !bv.isInitializable() && prim) {
-      menu.add(new TraceVariableAction(name,an));
+      if (prev > 0 && !bv.isInitializable() && prim) {
+         menu.add(new TraceVariableAction(name,an,bv.getStringValue(now)));
+       }
+      
+      if (first == 0 && !name.contains("@") && bv.isInitializable()) {
+         menu.add(new SetInitialValueAction(name,an));
+       }
     }
-
-   if (first == 0 && !name.contains("@") && bv.isInitializable()) {
-      menu.add(new SetInitialValueAction(name,an));
+   else if (name.equals("*RETURNS*")) {
+      if (prim) {
+         menu.add(new TraceReturnAction(an,bv.getStringValue(now)));
+       }
     }
+   
    if (bv.isComponent(now)) {
       menu.add(new CreateGraphicsAction(name,an));
     }
@@ -644,8 +653,8 @@ private class TraceVariableAction extends AbstractAction implements Runnable {
 
    private static final long serialVersionUID = 1;
 
-   TraceVariableAction(String name,BicexDataModel.AbstractNode var) {
-      super("Trace History of " + name);
+   TraceVariableAction(String name,BicexDataModel.AbstractNode var,String val) {
+      super("Why does " + name + " = " + val);
       variable_slot = var;
       var_history = null;
     }
@@ -660,6 +669,38 @@ private class TraceVariableAction extends AbstractAction implements Runnable {
 
    @Override public void run() {
       BoardLog.logD("BICEX","Process var history");
+      var_history.process();
+      var_history = null;
+    }
+
+}	// end of inner class TraceVariableAction
+
+
+
+private class TraceReturnAction extends AbstractAction implements Runnable {
+
+   private transient BicexDataModel.AbstractNode variable_slot;
+   private transient BicexVarHistory var_history;
+   
+   private static final long serialVersionUID = 1;
+   
+   TraceReturnAction(BicexDataModel.AbstractNode var,String val) {
+      super("Why is " + val + " returned");
+      variable_slot = var;
+      var_history = null;
+      BoardLog.logD("BICEX","CHECK RETURN " + getNodeName(var)); 
+    }
+   
+   @Override public void actionPerformed(ActionEvent evt) {
+      BoardLog.logD("BICEX","Compute return history for " + getNodeName(variable_slot));
+      var_history = new BicexVarHistory(eval_viewer,
+            variable_slot.getBicexValue(),
+            getNodeName(variable_slot));
+      BoardThreadPool.start(this);
+    }
+   
+   @Override public void run() {
+      BoardLog.logD("BICEX","Process return history");
       var_history.process();
       var_history = null;
     }

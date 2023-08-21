@@ -1256,39 +1256,39 @@ private static class TestRunnerAction extends AbstractAction {
 
    private boolean waitForBreak() {
       BumpClient bc = BumpClient.getBump();
-
+   
       int ctr = 0;
-
+   
       for ( ; ; ) {
-	 boolean ready = false;
-	 boolean stopped = false;
-	 for (BumpThread bt : debug_process.getThreads()) {
-	    if (bt.getThreadState() == BumpThreadState.STOPPED &&
-		  bt.getThreadDetails() == BumpThreadStateDetail.BREAKPOINT) {
-	       stopped = true;
-	       BumpThreadStack stk = bt.getStack();
-	       BumpStackFrame frm = stk.getFrame(0);
-	       String nm = test_case.getClassName() + "." + test_case.getMethodName();
-	       if (frm.getMethod().equals(nm)) {
-		  ready = true;
-		  break;
-		}
-	     }
-	  }
-	 if (ready || !debug_process.isRunning()) break;
-	 else if (stopped) {
-	    bc.resume(debug_process);
-	    ctr = 0;
-	  }
-
-	 if (++ctr > 60) return false;
-
-	 try {
-	    Thread.sleep(1000);
-	  }
-	 catch (InterruptedException e) { }
+         boolean ready = false;
+         boolean stopped = false;
+         for (BumpThread bt : debug_process.getThreads()) {
+            if (bt.getThreadState() == BumpThreadState.STOPPED &&
+        	  bt.getThreadDetails() == BumpThreadStateDetail.BREAKPOINT) {
+               stopped = true;
+               BumpThreadStack stk = bt.getStack();
+               BumpStackFrame frm = stk.getFrame(0);
+               String nm = test_case.getClassName() + "." + test_case.getMethodName();
+               if (frm.getMethod().equals(nm)) {
+        	  ready = true;
+        	  break;
+        	}
+             }
+          }
+         if (ready || !debug_process.isRunning()) break;
+         else if (stopped) {
+            bc.resume(debug_process);
+            ctr = 0;
+          }
+   
+         if (++ctr > 60) return false;
+   
+         try {
+            Thread.sleep(1000);
+          }
+         catch (InterruptedException e) { }
        }
-
+   
       return true;
     }
 

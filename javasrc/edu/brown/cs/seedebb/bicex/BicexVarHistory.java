@@ -176,7 +176,10 @@ private void addDependentNodes(VarNode vn)
       else if (t > now) break;
     }
 
-   if (prev <= 0) return;
+   if (prev <= 0) {
+      if (vn.isReturn()) prev = now;
+      else return;
+    }
 
    BicexEvaluationContext pctx = for_viewer.getContextForTime(prev+1);
    VarNode vn1 = new VarNode(VarNodeType.SET,pctx,prev,vn.getName(),vn.getValue());
@@ -185,6 +188,7 @@ private void addDependentNodes(VarNode vn)
       vn = vn1;
     }
 
+   BoardLog.logD("BICEX","DEPENDENT CONTEXT " + pctx);
    if (pctx == null) return;
 
    String vnm = vn.getName();
@@ -192,6 +196,7 @@ private void addDependentNodes(VarNode vn)
    if (idx > 0) vnm = vnm.substring(idx+1);
 
    int line = getLine(pctx,prev);
+   BoardLog.logD("BICEX","DEPENDENT LINE " + line);
    if (line <= 0) return;
 
    Element dep = null;
@@ -266,7 +271,7 @@ List<VarNode> findDependents(VarNode vnorig,Element dep,BicexEvaluationContext c
       chng = false;
       for (Element var : IvyXml.children(dep,"VAR")) {
 	 if (done.contains(var)) continue;
-	
+
 	 String vnm = IvyXml.getAttrString(var,"NAME");
 	 String vty = IvyXml.getAttrString(var,"TYPE");
 	 JcompSymbolKind knd = IvyXml.getAttrEnum(var,"KIND",JcompSymbolKind.NONE);
@@ -282,7 +287,7 @@ List<VarNode> findDependents(VarNode vnorig,Element dep,BicexEvaluationContext c
 		   }
 		}
 	       break;
-	
+
 	    case NONE :
 	    case CLASS :
 	    case INTERFACE :
@@ -294,7 +299,7 @@ List<VarNode> findDependents(VarNode vnorig,Element dep,BicexEvaluationContext c
 	    case ANNOTATION_MEMBER :
 	       done.add(var);
 	       break;
-	
+
 	    case LOCAL :
 	       done.add(var);
 	       String lclnm = ctx.getValueName(vnm,lno);
@@ -310,7 +315,7 @@ List<VarNode> findDependents(VarNode vnorig,Element dep,BicexEvaluationContext c
 		}
 	       break;
 	  }
-	
+
 	 if (bvs.size() > 0) {
 	    for (BicexValue bv : bvs) {
 	       VarNode vn = new VarNode(VarNodeType.VALUE,ctx,when,vnm,bv);
@@ -413,7 +418,7 @@ private static class VarNode {
       comes_from = null;
       other_data = null;
       BoardLog.logD("BICEX","Create DEPENDENCY " + ctx.getMethod() + " " + var +
-            " " + at + " " + value);
+	    " " + at + " " + value);
     }
 
    void addDependent(VarNode vn) {
@@ -432,6 +437,10 @@ private static class VarNode {
    VarNodeType getNodeType()		{ return node_type; }
 
    List<VarNode> getDependents()	{ return comes_from; }
+   
+   boolean isReturn() {
+      return var_name != null && var_name.endsWith("*RETURNS*");
+    }
 
 }	// end of inner class VarNode
 
@@ -473,10 +482,10 @@ private class VarHistoryPanel extends BicexPanel {
       VarNode vn = gn.getVarNode();
       BicexEvaluationContext ctx = vn.getContext();
       if (ctx == null) return;
-   
+
       long when = vn.getTime();
       if (when > 0) {
-         menu.add(getContextTimeAction("Go to " + ctx.getShortName(),ctx,when+1));
+	 menu.add(getContextTimeAction("Go to " + ctx.getShortName(),ctx,when+1));
        }
       menu.add(getSourceAction(ctx));
     }
@@ -516,9 +525,9 @@ private class VarHistoryGraph extends JPanel {
    void update() {
       Map<VarNode,GraphNode> nodes = new HashMap<>();
       petal_model.clear();
-   
+
       addNodes(start_node,nodes);
-   
+
       petal_model.fireModelUpdated();
       petal_editor.commandLayout(layout_method);
       Dimension dim = petal_editor.getPreferredSize();
@@ -531,19 +540,19 @@ private class VarHistoryGraph extends JPanel {
    private GraphNode addNodes(VarNode vn,Map<VarNode,GraphNode> nodes) {
       GraphNode gn = nodes.get(vn);
       if (gn != null) return gn;
-   
+
       gn = new GraphNode(vn);
       nodes.put(vn,gn);
       petal_model.addNode(gn);
-   
+
       if (vn.getDependents() != null) {
-         for (VarNode vn1 : vn.getDependents()) {
-            GraphNode gn1 = addNodes(vn1,nodes);
-            GraphArc ga = new GraphArc(gn,gn1);
-            petal_model.addArc(ga);
-          }
+	 for (VarNode vn1 : vn.getDependents()) {
+	    GraphNode gn1 = addNodes(vn1,nodes);
+	    GraphArc ga = new GraphArc(gn,gn1);
+	    petal_model.addArc(ga);
+	  }
        }
-   
+
       return gn;
     }
 
