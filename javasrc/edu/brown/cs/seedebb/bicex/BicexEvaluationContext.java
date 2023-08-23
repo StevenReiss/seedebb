@@ -210,6 +210,19 @@ long getStartTime()				{ return start_time; }
 
 long getEndTime()				{ return end_time; }
 
+Integer getLineAtTime(long t)
+{
+   BicexValue lnv = value_map.get("*LINE*");
+   if (lnv == null || file_name == null) return null;
+   String lnx = lnv.getStringValue(t);
+   if (lnx == null) return null;
+   try {
+      return Integer.decode(lnx);
+    }
+   catch (NumberFormatException e) { }
+   return null;
+}
+
 
 
 /********************************************************************************/

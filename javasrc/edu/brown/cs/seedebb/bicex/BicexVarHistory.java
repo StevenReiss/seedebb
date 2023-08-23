@@ -76,6 +76,7 @@ private long		start_time;
 private BicexEvaluationViewer for_viewer;
 private VarNode 	start_node;
 private VarHistoryPanel history_panel;
+private boolean         in_bubble;
 
 enum VarNodeType {
    VALUE, SET, STATEMENT, PARAMETER, CALL
@@ -90,12 +91,13 @@ enum VarNodeType {
 /*										*/
 /********************************************************************************/
 
-BicexVarHistory(BicexEvaluationViewer ev,BicexValue bv,String name)
+BicexVarHistory(BicexEvaluationViewer ev,BicexValue bv,String name,boolean bbl)
 {
    for_viewer = ev;
 
    BicexExecution ex = ev.getExecution();
    start_time = ex.getCurrentTime();
+   in_bubble = bbl;
 
    start_node = new VarNode(VarNodeType.VALUE,ex.getCurrentContext(),start_time,name,bv);
 
@@ -117,10 +119,12 @@ void process()
    if (history_panel == null) {
       BoardLog.logD("BICEX","Create VarHistory panel");
       history_panel = new VarHistoryPanel();
-      for_viewer.setHistoryPanel(history_panel);
+      if (!in_bubble) for_viewer.setHistoryPanel(history_panel);
     }
    history_panel.forceUpdate();
 }
+
+
 
 
 void update()
@@ -148,6 +152,8 @@ void update()
    BoardThreadPool.start(new Updater());
 }
 
+
+BicexPanel getPanel()                   { return history_panel; }
 
 
 private class Updater implements Runnable {
@@ -177,7 +183,7 @@ private void addDependentNodes(VarNode vn)
     }
 
    if (prev <= 0) {
-      if (vn.isReturn()) prev = now;
+      if (vn.isReturn()) prev = now-1;
       else return;
     }
 
@@ -482,10 +488,10 @@ private class VarHistoryPanel extends BicexPanel {
       VarNode vn = gn.getVarNode();
       BicexEvaluationContext ctx = vn.getContext();
       if (ctx == null) return;
-
+   
       long when = vn.getTime();
       if (when > 0) {
-	 menu.add(getContextTimeAction("Go to " + ctx.getShortName(),ctx,when+1));
+         menu.add(getContextTimeAction("Go to " + ctx.getShortName(),ctx,when+1));
        }
       menu.add(getSourceAction(ctx));
     }
