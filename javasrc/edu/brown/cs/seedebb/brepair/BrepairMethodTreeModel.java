@@ -24,6 +24,8 @@
 
 package edu.brown.cs.seedebb.brepair;
 
+import edu.brown.cs.bubbles.board.BoardLog;
+
 import edu.brown.cs.ivy.swing.SwingEventListenerList;
 
 import javax.swing.event.TreeModelEvent;
@@ -117,7 +119,10 @@ void countsUpdated()
     }
    else if (root_methods.contains(par)) {
       List<String> blks = count_data.getSortedBlocks(par);
-      if (blks == null || idx < 0 || idx >= blks.size()) return null;
+      if (blks == null || idx < 0 || idx >= blks.size()) {
+	 BoardLog.logD("BREPAIR","NO child found for " + idx + " " + blks);
+	 return null;
+       }
       return blks.get(idx);
     }
    return null;

@@ -211,9 +211,15 @@ private void setupLaunch()
    createBreakpoint();
 
    createLaunch();
-   
+
    BoardLog.logD("BREPAIR","Work on process " + debug_process);
-   if (debug_process == null) return;
+   if (debug_process == null) {
+      synchronized (this) {
+	 is_running = false;
+	 notifyAll();
+       }
+      return;
+    }
 
    waitForBreak();
 

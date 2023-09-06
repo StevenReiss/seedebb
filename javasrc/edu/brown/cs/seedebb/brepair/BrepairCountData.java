@@ -60,8 +60,8 @@ private int				fail_total;
 private int				user_pass_total;
 private int				user_fail_total;
 private List<String>			sorted_methods;
-private double                          max_flow_priority;
-private double                          flow_factor;
+private double				max_flow_priority;
+private double				flow_factor;
 
 private static double USER_SCALE_FACTOR = 10.0;
 private static double DEFAULT_FLOW_FACTOR = 0.8;
@@ -190,7 +190,7 @@ void computeSortedMethods(String testname,int max,double cutoff)
 {
    SortedSet<MethodAccumData> mthds = new TreeSet<>(new MethodComparator());
    if (max_flow_priority == 0) flow_factor = 0;
-   
+
    for (MethodAccumData mad : method_data.values()) {
       mad.computeOchaia();
       BoardLog.logD("BREPAIR","ADD METHOD " + mad.getScore() + " " + mad.getName());
@@ -318,14 +318,14 @@ private MethodAccumData getMethodData(String method)
 /********************************************************************************/
 
 private abstract class AccumData {
-   
+
    private int fail_count;
    private int pass_count;
    private int user_fail_count;
    private int user_pass_count;
    private double flow_priority;
    protected double total_score;
-   
+
    AccumData() {
       fail_count = 0;
       pass_count = 0;
@@ -334,30 +334,30 @@ private abstract class AccumData {
       total_score = 0;
       flow_priority = 0;
     }
-   
+
    void count(boolean pass) {
       if (pass) pass_count++;
       else fail_count++;
     }
-   
+
    void userCount(boolean pass) {
       if (pass) user_pass_count++;
       else user_fail_count++;
     }
-   
+
    void userMark(boolean pass) {
       if (pass) ++user_pass_count;
       else ++user_fail_count;
     }
-   
-   
+
+
    void setFlowPriority(double v) {
       flow_priority = Math.max(flow_priority,v);
     }
-   
+
    double computeOchaia() {
       double a01 = fail_total + user_fail_total*USER_SCALE_FACTOR -
-         fail_count - user_fail_count*USER_SCALE_FACTOR;
+	 fail_count - user_fail_count*USER_SCALE_FACTOR;
       // double a00 = pass_total + user_pass_count*scale_factor -
       //     pass_count - user_pass_count*scale_factor;
       double a11 = fail_count + user_fail_count*USER_SCALE_FACTOR;
@@ -365,13 +365,13 @@ private abstract class AccumData {
       double div = Math.sqrt((a11 + a01)*(a11+a10));
       double stscore = 0;
       if (div != 0) stscore = a11/div;
-      
+
       double flscore = (flow_priority > 0 ? 1 : 0);
       if (fail_count == 0) flscore = 0;
       if (user_pass_count > 0) flscore /= USER_SCALE_FACTOR;
-      
+
       total_score = (1-flow_factor) * stscore + flow_factor * flscore;
-      
+
       return total_score;
     }
 }
@@ -397,12 +397,12 @@ private class MethodAccumData extends AccumData {
        }
       bad.count(pass);
     }
-   
+
    void setFlowPriority(int ln,double pr) {
       for (BlockAccumData bd : block_data.values()) {
-         if (bd.getStartLine() <= ln && ln <= bd.getEndLine()) {
-            bd.setFlowPriority(pr);
-          }
+	 if (bd.getStartLine() <= ln && ln <= bd.getEndLine()) {
+	    bd.setFlowPriority(pr);
+	  }
        }
       super.setFlowPriority(pr);
     }
@@ -413,31 +413,31 @@ private class MethodAccumData extends AccumData {
 
    double computeOchaia() {
       if (block_data != null && block_data.size() > 0) {
-         total_score = 0;
-         for (BlockAccumData bad : block_data.values()) {
-            double lnscore = bad.computeOchaia();
-            if (lnscore > total_score) total_score = lnscore;
-          }
-         active_blocks = null;
+	 total_score = 0;
+	 for (BlockAccumData bad : block_data.values()) {
+	    double lnscore = bad.computeOchaia();
+	    if (lnscore > total_score) total_score = lnscore;
+	  }
+	 active_blocks = null;
        }
       else super.computeOchaia();
-      
+
       return total_score;
     }
-   
+
    void computeSortedBlocks(double cutoff) {
       if (active_blocks == null) {
-         SortedSet<BlockAccumData> blks = new TreeSet<>(new BlockComparator());
-         for (BlockAccumData bad : block_data.values()) {
-            if (bad.getScore() >= cutoff && bad.getStartLine() > 0) {
-               blks.add(bad);
-               BoardLog.logD("BREPAIR","ADD BLOCK " + bad.getScore() + " " + bad.getStartLine() + " " + method_name);
-             }
-          }
-         active_blocks = new ArrayList<>();
-         for (BlockAccumData bad : blks) {
-            active_blocks.add(bad.getName());
-          }
+	 SortedSet<BlockAccumData> blks = new TreeSet<>(new BlockComparator());
+	 for (BlockAccumData bad : block_data.values()) {
+	    if (bad.getScore() >= cutoff && bad.getStartLine() > 0) {
+	       blks.add(bad);
+	       BoardLog.logD("BREPAIR","ADD BLOCK " + bad.getScore() + " " + bad.getStartLine() + " " + method_name);
+	     }
+	  }
+	 active_blocks = new ArrayList<>();
+	 for (BlockAccumData bad : blks) {
+	    active_blocks.add(bad.getName());
+	  }
        }
     }
 
@@ -465,9 +465,9 @@ private static class MethodComparator implements Comparator<MethodAccumData>
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Block accumulator                                                       */
-/*                                                                              */
+/*										*/
+/*	Block accumulator							*/
+/*										*/
 /********************************************************************************/
 
 private class BlockAccumData extends AccumData {
@@ -507,7 +507,9 @@ private static class BlockComparator implements Comparator<BlockAccumData>
       int sln2 = m2.getStartLine();
       if (sln1 < sln2) return -1;
       else if (sln2 < sln1) return 1;
-      return m1.getName().compareTo(m2.getName());
+      int nmc = m1.getName().compareTo(m2.getName());
+      if (nmc != 0) return nmc;
+      return Integer.compare(m1.hashCode(),m2.hashCode());
     }
 }
 
