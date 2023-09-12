@@ -27,10 +27,10 @@ package edu.brown.cs.seedebb.brepair;
 import edu.brown.cs.bubbles.batt.BattConstants;
 import edu.brown.cs.bubbles.batt.BattConstants.BattTest;
 import edu.brown.cs.bubbles.batt.BattFactory;
-import edu.brown.cs.bubbles.board.BoardSetup;
 import edu.brown.cs.bubbles.buda.BudaBubble;
 import edu.brown.cs.bubbles.buda.BudaConstants.BubbleViewCallback;
 import edu.brown.cs.bubbles.buda.BudaConstants.BudaWorkingSet;
+import edu.brown.cs.bubbles.bump.BumpClient;
 import edu.brown.cs.bubbles.buda.BudaRoot;
 
 import javax.swing.AbstractAction;
@@ -68,17 +68,8 @@ public static void setup()			{ }
 
 public static void initialize(BudaRoot br)
 {
-   switch (BoardSetup.getSetup().getLanguage()) {
-      default :
-      case JS :
-      case PYTHON :
-      case REBUS :
-      case DART :
-	 return;
-      case JAVA :
-	 break;
-    }
-
+   if (!BumpClient.getBump().getOptionBool("bubbles.useSeede")) return;
+   
    BattFactory batt = BattFactory.getFactory();
    batt.addPopupHandler(new TestPopupHandler());
 

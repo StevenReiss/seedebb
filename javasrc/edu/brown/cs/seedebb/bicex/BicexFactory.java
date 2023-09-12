@@ -124,17 +124,7 @@ private static BicexFactory	the_factory = new BicexFactory();
 
 public static void setup()
 {
-   switch (BoardSetup.getSetup().getLanguage()) {
-      default :
-      case JS :
-      case PYTHON :
-      case REBUS :
-      case DART :
-	 return;
-      case JAVA :
-      case JAVA_IDEA :						
-	 break;
-    }
+   if (!BumpClient.getBump().getOptionBool("bubbles.useSeede")) return;
 
    BoardLog.logD("BICEX","Start bicex for " + BoardSetup.getSetup().getLanguage());
 
@@ -169,18 +159,8 @@ private static class ResourceFilter implements BoardPluginFilter {
 
 public static void initialize(BudaRoot br)
 {
-   switch (BoardSetup.getSetup().getLanguage()) {
-      default :
-      case JS :
-      case PYTHON :
-      case REBUS :
-      case DART :
-	 return;
-      case JAVA :
-      case JAVA_IDEA :
-	 break;
-    }
-
+   if (!BumpClient.getBump().getOptionBool("bubbles.useSeede")) return;
+      
    BoardLog.logD("BICEX","Start with language = " + BoardSetup.getSetup().getLanguage());
 
    getFactory().exec_model = new BicexExecModel();
