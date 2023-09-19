@@ -536,7 +536,7 @@ Element sendSeedeMessage(String id,String cmd,CommandArgs args,String cnts)
 
    mc.send(msg,rply,MINT_MSG_FIRST_NON_NULL);
 
-   Element rslt = rply.waitForXml(300000);
+   Element rslt = rply.waitForXml(30000);
 
    BoardLog.logD("BICEX","Reply from SEEDE: " + IvyXml.convertXmlToString(rslt));
    if (rslt == null && (cmd.equals("START") || cmd.equals("BEGIN"))) {
