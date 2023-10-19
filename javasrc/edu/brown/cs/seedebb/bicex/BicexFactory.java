@@ -27,7 +27,6 @@ package edu.brown.cs.seedebb.bicex;
 import edu.brown.cs.bubbles.bale.BaleConstants.BaleContextConfig;
 import edu.brown.cs.bubbles.bale.BaleConstants.BaleContextListener;
 import edu.brown.cs.bubbles.bale.BaleConstants.BaleFileOverview;
-import edu.brown.cs.bubbles.bale.BaleConstants.BaleWindow;
 import edu.brown.cs.bubbles.bale.BaleFactory;
 import edu.brown.cs.bubbles.batt.BattConstants.BattPopupHandler;
 import edu.brown.cs.bubbles.batt.BattConstants.BattTest;
@@ -1000,13 +999,6 @@ private BicexExecution getExecution(BaleContextConfig cfg)
 
 private static class BicexContextListener implements BaleContextListener {
 
-   @Override public BudaBubble getHoverBubble(BaleContextConfig cfg) {
-      return null;
-    }
-
-   @Override public void addPopupMenuItems(BaleContextConfig cfg,JPopupMenu m) {
-    }
-
    @Override public String getToolTipHtml(BaleContextConfig cfg) {
       String name = cfg.getToken();
       if (name == null) return null;
@@ -1050,10 +1042,6 @@ private static class BicexContextListener implements BaleContextListener {
       }
       return IvyXml.htmlSanitize(buf.toString());
     }
-
-   @Override public void noteEditorAdded(BaleWindow win)	{ }
-
-   @Override public void noteEditorRemoved(BaleWindow win)	{ }
 
 }
 
@@ -1111,17 +1099,17 @@ private static class TestPopupHandler implements BattPopupHandler {
 
    @Override public void handlePopupMenu(BattTest test,BudaBubble bbl,JPopupMenu menu) {
       if (test == null) return;
-
+   
       // don't offer to show the test if there are compiler errors
       BumpClient bc = BumpClient.getBump();
       switch (bc.getErrorType()) {
-	 case FATAL :
-	 case ERROR :
-	    return;
-	 default :
-	    break;
+         case FATAL :
+         case ERROR :
+            return;
+         default :
+            break;
        }
-
+   
       menu.add(new TestRunnerAction(bbl,test));
     }
 
