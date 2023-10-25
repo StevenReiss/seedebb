@@ -471,13 +471,13 @@ private class ValueNode extends AbstractNode {
    @Override public Object getValue() {
       String s = for_value.getStringValue(for_execution.getCurrentTime());
       if (s != null) {
-	 s = s.replace("\n","\\n");
-	 s = s.replace("\t","\\t");
-	 String dt = for_value.getDataType(for_execution.getCurrentTime());
-	 if (dt != null && dt.equals("java.lang.String")) {
-	    s = s.replace("\"","\\\"");
-	    s = "\"" + s + "\"";
-	  }
+         s = s.replace("\n","\\n");
+         s = s.replace("\t","\\t");
+         String dt = for_value.getDataType(for_execution.getCurrentTime());
+         if (dt != null && dt.equals("java.lang.String")) {
+            s = s.replace("\"","\\\"");
+            s = "\"" + s + "\"";
+          }
        }
       return s;
     }

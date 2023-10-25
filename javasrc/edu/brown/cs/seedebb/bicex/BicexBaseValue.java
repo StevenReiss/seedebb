@@ -126,6 +126,11 @@ BicexBaseValue(Element xml,Map<String,BicexBaseValue> knownvalues,Map<String,Bic
       if (value_text == null || value_text.equals("0")) value_text = "false";
       else value_text = "true";
     }
+   else if (IvyXml.getAttrBool(xml,"CHARS")) {
+      int len = IvyXml.getAttrInt(xml,"LENGTH");
+      String text = IvyXml.getText(xml);
+      value_text = IvyXml.decodeCharacters(text,len);
+    }
    else {
       value_text = IvyXml.getText(xml);
     }

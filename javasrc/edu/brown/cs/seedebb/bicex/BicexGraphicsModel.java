@@ -553,44 +553,44 @@ static class FieldCommand extends GraphicsCommand {
    private Object decodeField(Element xml) {
       Object rslt = null;
       if (IvyXml.isElement(xml,"COLOR")) {
-	 rslt = IvyXml.getAttrColor(xml,"VALUE");
+         rslt = IvyXml.getAttrColor(xml,"VALUE");
        }
       else if (IvyXml.isElement(xml,"FONT")) {
-	 float fsz = IvyXml.getAttrFloat(xml,"SIZE");
-	 int intsz = (int) fsz;
-	 rslt = new Font(IvyXml.getAttrString(xml,"NAME"),IvyXml.getAttrInt(xml,"STYLE"),
-	       intsz);
-	 if (intsz != fsz) {
-	    rslt = ((Font) rslt).deriveFont(fsz);
-	  }
+         float fsz = IvyXml.getAttrFloat(xml,"SIZE");
+         int intsz = (int) fsz;
+         rslt = new Font(IvyXml.getAttrString(xml,"NAME"),IvyXml.getAttrInt(xml,"STYLE"),
+               intsz);
+         if (intsz != fsz) {
+            rslt = ((Font) rslt).deriveFont(fsz);
+          }
        }
       else if (IvyXml.isElement(xml,"RECT")) {
-	 rslt = new Rectangle(IvyXml.getAttrInt(xml,"X"),IvyXml.getAttrInt(xml,"Y"),
-	       IvyXml.getAttrInt(xml,"WIDTH"),IvyXml.getAttrInt(xml,"HEIGHT"));
+         rslt = new Rectangle(IvyXml.getAttrInt(xml,"X"),IvyXml.getAttrInt(xml,"Y"),
+               IvyXml.getAttrInt(xml,"WIDTH"),IvyXml.getAttrInt(xml,"HEIGHT"));
        }
       else if (IvyXml.isElement(xml,"ALPHACOMP")) {
-	 rslt = AlphaComposite.getInstance(IvyXml.getAttrInt(xml,"RULE"),
-	       IvyXml.getAttrFloat(xml,"ALPHA"));
+         rslt = AlphaComposite.getInstance(IvyXml.getAttrInt(xml,"RULE"),
+               IvyXml.getAttrFloat(xml,"ALPHA"));
        }
       else if (IvyXml.isElement(xml,"BASICSTROKE")) {
-	 // handle stroke
+         // handle stroke
        }
       else if (IvyXml.isElement(xml,"HINTS")) {
-	 // handle hints
+         // handle hints
        }
       else if (IvyXml.isElement(xml,"TRANSFORM")) {
-	 rslt = new AffineTransform(IvyXml.getAttrDouble(xml,"M00"),IvyXml.getAttrDouble(xml,"M10"),
-		  IvyXml.getAttrDouble(xml,"M01"),IvyXml.getAttrDouble(xml,"M11"),
-		  IvyXml.getAttrDouble(xml,"M02"),IvyXml.getAttrDouble(xml,"M12"));
+         rslt = new AffineTransform(IvyXml.getAttrDouble(xml,"M00"),IvyXml.getAttrDouble(xml,"M10"),
+        	  IvyXml.getAttrDouble(xml,"M01"),IvyXml.getAttrDouble(xml,"M11"),
+        	  IvyXml.getAttrDouble(xml,"M02"),IvyXml.getAttrDouble(xml,"M12"));
        }
       else if (IvyXml.isElement(xml,"GRADIENT")) {
-	 rslt = new GradientPaint(IvyXml.getAttrFloat(xml,"X1"),IvyXml.getAttrFloat(xml,"Y1"),
-	       IvyXml.getAttrColor(xml,"C1"),
-	       IvyXml.getAttrFloat(xml,"X2"),IvyXml.getAttrFloat(xml,"Y2"),
-	       IvyXml.getAttrColor(xml,"C2"),
-	       IvyXml.getAttrBool(xml,"CYC"));
+         rslt = new GradientPaint(IvyXml.getAttrFloat(xml,"X1"),IvyXml.getAttrFloat(xml,"Y1"),
+               IvyXml.getAttrColor(xml,"C1"),
+               IvyXml.getAttrFloat(xml,"X2"),IvyXml.getAttrFloat(xml,"Y2"),
+               IvyXml.getAttrColor(xml,"C2"),
+               IvyXml.getAttrBool(xml,"CYC"));
        }
-
+   
       return rslt;
     }
 
