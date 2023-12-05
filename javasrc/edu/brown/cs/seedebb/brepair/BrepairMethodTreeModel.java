@@ -28,6 +28,7 @@ import edu.brown.cs.bubbles.board.BoardLog;
 
 import edu.brown.cs.ivy.swing.SwingEventListenerList;
 
+import javax.swing.SwingUtilities;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
@@ -75,16 +76,24 @@ BrepairMethodTreeModel(BrepairCountData bcd)
 
 void countsUpdated()
 {
-   Object [] spath = new Object[1];
-   spath[0] = root_object;
-   TreeModelEvent evt = new TreeModelEvent(this,spath);
-
-   root_methods = count_data.getSortedMethods();
-   for (TreeModelListener tml : model_listeners) {
-      tml.treeStructureChanged(evt);
-    }
+   SwingUtilities.invokeLater(new UpdateCounts());
 }
 
+
+private class UpdateCounts implements Runnable {
+
+   @Override public void run() {
+      Object [] spath = new Object[1];
+      spath[0] = root_object;
+      TreeModelEvent evt = new TreeModelEvent(this,spath);
+      
+      root_methods = count_data.getSortedMethods();
+      for (TreeModelListener tml : model_listeners) {
+         tml.treeStructureChanged(evt);
+       }
+    }
+   
+}       // end of inner class UpdateCounts
 
 
 /********************************************************************************/

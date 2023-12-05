@@ -190,14 +190,14 @@ static class GraphicsData implements DisplayModel {
       if (!useTime()) when = -1;
       active_graphics = new HashMap<>();
       active_graphics.put(0,g0);
-
+   
       Graphics2D g = g0;
       base_clip = g.getClipBounds();
       for (GraphicsCommand gc : window_commands) {
-	 g = gc.getGraphics(g0,this);
-	 if (when < 0 || gc.getTime() <= when) {
-	    gc.paint(g,this);
-	  }
+         g = gc.getGraphics(g0,this);
+         if (when < 0 || gc.getTime() <= when) {
+            gc.paint(g,this);
+          }
        }
     }
 
@@ -308,6 +308,8 @@ static class DrawCommand extends GraphicsCommand {
         	  getIntArg(4),getIntArg(5));
             break;
          case DRAW_STRING :
+            BoardLog.logD("BICEX","STRING " + getStringArg(0)  + " " + getFloatArg(1) + " " +
+                  getFloatArg(2));
             g.drawString(getStringArg(0),getFloatArg(1),getFloatArg(2));
             break;
          case FILL :
@@ -358,6 +360,7 @@ static class DrawCommand extends GraphicsCommand {
             break;
          case TRANSFORM :
             g.transform((AffineTransform) command_args.get(0));
+            BoardLog.logD("BIXEX","RESULT " + g.getTransform());
             break;
          case TRANSLATE :
             g.translate(getDoubleArg(0),getDoubleArg(1));
@@ -498,55 +501,57 @@ static class FieldCommand extends GraphicsCommand {
       super(xml);
       field_type = IvyXml.getAttrEnum(xml,"TYPE",FieldType.NONE);
       for (Element ce : IvyXml.children(xml)) {
-	 field_value = decodeField(ce);
-	 break;
+         field_value = decodeField(ce);
+         break;
        }
     }
 
    @Override void paint(Graphics2D g,GraphicsData gd) {
       if (field_value == null) return;
       BoardLog.logD("BICEX","FIELD " + field_type + " " + g.getClipBounds());
-
+   
       switch (field_type) {
-	 case PAINT :
-	    g.setPaint((Paint) field_value);
-	    break;
-	 case FG :
-	    g.setColor((Color) field_value);
-	    break;
-	 case BG :
-	    g.setBackground((Color) field_value);
-	    break;
-	 case CLIP :
-	    Shape r = (Shape) field_value;
-	    Shape r1 = gd.getBaseClip();
-	    Shape r2 = g.getTransform().createTransformedShape(r1);
-	    try {
-	       r1 = g.getTransform().createInverse().createTransformedShape(r1);
-	    }
-	    catch (Throwable t) { }
-	    BoardLog.logD("BICEX","CLIPVALUE " + r1.getBounds() + " " + r2.getBounds() + " " + r +
-		  " " + g.getClip());
-	    // g.setClip(r1);
-	    // g.clip(r);
-	    // g.setClip(r);
-	    break;
-	 case TRANSFORM :
-	    BoardLog.logD("BICEX","TRANSFORM " + g.getTransform() + " " + field_value);
-	    break;
-	 case FONT :
-	    g.setFont((Font) field_value);
-	    break;
-	 case COMPOSITE :
-	    g.setComposite((Composite) field_value);
-	    break;
-	 case STROKE :
-	    g.setStroke((Stroke) field_value);
-	    break;
-	 case HINTS :
-	    break;
-	 case NONE :
-	    break;
+         case PAINT :
+            g.setPaint((Paint) field_value);
+            break;
+         case FG :
+            g.setColor((Color) field_value);
+            break;
+         case BG :
+            g.setBackground((Color) field_value);
+            break;
+         case CLIP :
+            Shape r = (Shape) field_value;
+            Shape r1 = gd.getBaseClip();
+            Shape r2 = g.getTransform().createTransformedShape(r1);
+            try {
+               r1 = g.getTransform().createInverse().createTransformedShape(r1);
+             }
+            catch (Throwable t) { }
+            BoardLog.logD("BICEX","CLIPVALUE " + r1.getBounds() + " " + r2.getBounds() + " " + r +
+        	  " " + g.getClip());
+            // g.setClip(r1);
+            // g.clip(r);
+            // g.setClip(r);
+            break;
+         case TRANSFORM :
+            AffineTransform nt = (AffineTransform) field_value;
+            BoardLog.logD("BICEX","TRANSFORM " + g.getTransform() + " " + field_value);
+            g.setTransform(nt);
+            break;
+         case FONT :
+            g.setFont((Font) field_value);
+            break;
+         case COMPOSITE :
+            g.setComposite((Composite) field_value);
+            break;
+         case STROKE :
+            g.setStroke((Stroke) field_value);
+            break;
+         case HINTS :
+            break;
+         case NONE :
+            break;
        }
     }
 
@@ -579,9 +584,12 @@ static class FieldCommand extends GraphicsCommand {
          // handle hints
        }
       else if (IvyXml.isElement(xml,"TRANSFORM")) {
-         rslt = new AffineTransform(IvyXml.getAttrDouble(xml,"M00"),IvyXml.getAttrDouble(xml,"M10"),
-        	  IvyXml.getAttrDouble(xml,"M01"),IvyXml.getAttrDouble(xml,"M11"),
-        	  IvyXml.getAttrDouble(xml,"M02"),IvyXml.getAttrDouble(xml,"M12"));
+         rslt = new AffineTransform(IvyXml.getAttrDouble(xml,"M00"),
+               IvyXml.getAttrDouble(xml,"M10"),
+               IvyXml.getAttrDouble(xml,"M01"),
+               IvyXml.getAttrDouble(xml,"M11"),
+               IvyXml.getAttrDouble(xml,"M02"),
+               IvyXml.getAttrDouble(xml,"M12"));
        }
       else if (IvyXml.isElement(xml,"GRADIENT")) {
          rslt = new GradientPaint(IvyXml.getAttrFloat(xml,"X1"),IvyXml.getAttrFloat(xml,"Y1"),
