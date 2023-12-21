@@ -154,6 +154,8 @@ boolean isInitializable()			{ return false; }
 
 boolean isComponent(long when)			{ return false; }
 
+void reset()                                    { }
+
 
 
 }	// end of interface BicexValue

@@ -125,6 +125,13 @@ BicexRefValue(long when,BicexBaseValue base)
 }
 
 
+@Override void reset()
+{
+   last_update = -1;
+}
+
+
+
 /********************************************************************************/
 /*										*/
 /*	Methods to get/set value						*/
@@ -160,6 +167,7 @@ BicexBaseValue getValueAt(long tv)
     }
 
    if (value_map == null) return null;
+   
 
    SortedMap<Long,BicexBaseValue> head = value_map.headMap(tv);
    if (head.isEmpty()) return null;

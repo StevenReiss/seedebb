@@ -169,12 +169,14 @@ private class EvalAnnot implements BaleAnnotation {
    private Color annot_color;
    private File for_file;
    private long exec_time;
+   private int line_number;
 
    EvalAnnot(int lno,long when) {
       eval_context = getContext();
       for_file = new File(eval_context.getFileName());
       execute_pos = null;
       exec_time = when;
+      line_number = lno;
 
       for_document = BaleFactory.getFactory().getFileOverview(null,for_file,false);
       int off = for_document.findLineOffset(lno);
@@ -219,44 +221,55 @@ private class EvalAnnot implements BaleAnnotation {
    @Override public void addPopupButtons(Component c,JPopupMenu m) {
       Map<String,BicexValue> values = eval_context.getValues();
       BicexValue lnv = values.get("*LINE*");
+      lnv.reset();
       long prev = eval_context.getStartTime();
       long next = 0;
+      long laststart = -1;
       for (Integer t0 : lnv.getTimeChanges()) {
-	 if (t0 > exec_time) {
-	    next = t0;
-	    break;
-	  }
-	 prev = t0;
+         String lnov = lnv.getStringValue(t0+1);
+         if (lnov != null) {
+            int lno = Integer.parseInt(lnov);
+            if (lno == line_number) laststart = t0;
+          }
+         if (t0 > exec_time) {
+            next = t0;
+            break;
+          }
+         prev = t0;
        }
-
+   
       Map<String,BicexValue> whys = new LinkedHashMap<>();
-
+   
       if (next == 0 && exec_time == eval_context.getEndTime()) {
-	 next = exec_time;
+         next = exec_time;
        }
-
+      else if (next == 0) {
+         prev = laststart;
+         next = exec_time;
+       }
+   
       if (prev <= 0 || next <= 0) return;
       for (Map.Entry<String,BicexValue> ent : values.entrySet()) {
-	 String var = ent.getKey();
-	 BicexValue bv = ent.getValue();
-	 if (bv.hasChildren(next)) continue;
-	 if (var.equals("*LINE*")) continue;
-	 if (var.equals("*RETURNS*")) {
-	    if (eval_context.getEndTime() == exec_time) whys.put(var,bv);
-	    continue;
-	  }
-	 List<Integer> tc = bv.getTimeChanges();
-	 for (Integer t0 : tc) {
-	    if (t0 != 0 && t0 >= prev && t0 <= next) {
-	       whys.put(var,bv);
-	       break;
-	     }
-	    else if (t0 > next) break;
-	  }
+         String var = ent.getKey();
+         BicexValue bv = ent.getValue();
+         if (bv.hasChildren(next)) continue;
+         if (var.equals("*LINE*")) continue;
+         if (var.equals("*RETURNS*")) {
+            if (eval_context.getEndTime() == exec_time) whys.put(var,bv);
+            continue;
+          }
+         List<Integer> tc = bv.getTimeChanges();
+         for (Integer t0 : tc) {
+            if (t0 != 0 && t0 >= prev && t0 <= next) {
+               whys.put(var,bv);
+               break;
+             }
+            else if (t0 > next) break;
+          }
        }
       BoardLog.logD("BICEX","Found " + whys);
       for (Map.Entry<String,BicexValue> ent : whys.entrySet()) {
-	 m.add(new WhyAction(ent.getKey(),ent.getValue(),exec_time));
+         m.add(new WhyAction(ent.getKey(),ent.getValue(),exec_time));
        }
     }
 
