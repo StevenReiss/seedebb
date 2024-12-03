@@ -257,7 +257,7 @@ private static class BicexDebug {
 
 
 
-private static class ThreadComparator implements Comparator<BumpThread> {
+private static final class ThreadComparator implements Comparator<BumpThread> {
 
    @Override public int compare(BumpThread bt1,BumpThread bt2) {
       return bt1.getId().compareTo(bt2.getId());

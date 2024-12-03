@@ -79,10 +79,10 @@ private String		fait_session;
 private Element 	last_analysis;
 private AnalysisState	analysis_state;
 
-private static final Pattern stack_pat =
+private static final Pattern STACK_PATTERN =
    Pattern.compile("at ([a-zA-z0-9_.$]+)\\(([A-Za-z0-9_.$]+)\\:([0-9]+)\\)");
 
-private static AtomicInteger id_counter = new AtomicInteger((int)(Math.random()*256000.0));
+private static AtomicInteger id_counter = new AtomicInteger((int) (Math.random()*256000.0));
 
 
 /********************************************************************************/
@@ -215,7 +215,8 @@ private boolean waitForSetup()
     }
 
    BoardProperties props = BoardProperties.getProperties("Brepair");
-   int nth = props.getInt("Brepair.fait.threads",4);   CommandArgs args = new CommandArgs("REPORT","SOURCE",
+   int nth = props.getInt("Brepair.fait.threads",4);  
+   CommandArgs args = new CommandArgs("REPORT","SOURCE",
 	 "THREADS",nth);
    analysis_state = AnalysisState.PENDING;
    Element r2 = sendFaitMessage("ANALYZE",args,null);
@@ -404,8 +405,8 @@ private Element getBackSliceStart()
    int ct = 0;
    while (tok.hasMoreTokens()) {
       String ln = tok.nextToken().trim();
-      Matcher m = stack_pat.matcher(ln);
-      BoardLog.logD("BREPAIR","MATCH " + ln + " " + m.matches() + " " + stack_pat);
+      Matcher m = STACK_PATTERN.matcher(ln);
+      BoardLog.logD("BREPAIR","MATCH " + ln + " " + m.matches() + " " + STACK_PATTERN);
       if (m.matches()) {
 	 String mthd = m.group(1);
 	 String file = m.group(2);
@@ -491,7 +492,7 @@ private void sendFaitMessage(String id,String cmd,CommandArgs args,String cnts,M
 /********************************************************************************/
 
 
-private class UpdateHandler implements MintHandler {
+private final class UpdateHandler implements MintHandler {
 
    @Override public void receive(MintMessage msg,MintArguments args) {
       BoardLog.logD("BREPAIR","Fait message: " + msg.getText());

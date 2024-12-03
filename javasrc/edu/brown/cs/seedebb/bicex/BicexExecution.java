@@ -75,7 +75,7 @@ private int		last_counter;
 private int		working_counter;
 private Set<File>	added_files;
 
-private static AtomicInteger id_counter = new AtomicInteger((int)(Math.random()*256000.0));
+private static AtomicInteger id_counter = new AtomicInteger((int) (Math.random()*256000.0));
 
 
 

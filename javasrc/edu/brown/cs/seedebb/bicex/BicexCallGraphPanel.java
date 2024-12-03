@@ -144,7 +144,7 @@ BicexCallGraphPanel(BicexEvaluationViewer ev,boolean tree)
 
 
 
-private class Updater implements Runnable {
+private final class Updater implements Runnable {
 
    @Override public void run() {
       call_graph.update();
@@ -305,7 +305,7 @@ private class CallGraph extends JPanel {
 
 
 
-private class Model extends PetalModelDefault {
+private final class Model extends PetalModelDefault {
 
 }	// end of inner class Model
 
@@ -380,7 +380,7 @@ private class Arc extends PetalArcDefault
 
    void addInstance() {
       arc_weight++;
-      float wt = (float)(1+Math.log(arc_weight)/Math.log(2));
+      float wt = (float) (1+Math.log(arc_weight)/Math.log(2));
       setStroke(new BasicStroke(wt));
     }
 

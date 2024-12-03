@@ -189,7 +189,7 @@ private synchronized BicexResult waitForSetup()
 
 
 
-private class SetupRunner implements Runnable {
+private final class SetupRunner implements Runnable {
 
    @Override public void run() {
       setupLaunch();

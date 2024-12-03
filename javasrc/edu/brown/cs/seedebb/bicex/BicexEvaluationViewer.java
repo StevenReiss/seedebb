@@ -931,7 +931,7 @@ private class InnerLabel extends JLabel implements ClickLabel {
 
 
 
-private class LabelMouser extends MouseAdapter {
+private final class LabelMouser extends MouseAdapter {
 
    @Override public void mouseClicked(MouseEvent evt) {
       if (evt.getClickCount() > 1) return;
@@ -1103,7 +1103,7 @@ private class AddOpenEditorsAction extends AbstractAction {
 /*										*/
 /********************************************************************************/
 
-private class TabChanged implements ChangeListener
+private final class TabChanged implements ChangeListener
 {
    @Override public void stateChanged(ChangeEvent evt) {
       int sel = tab_pane.getSelectedIndex();

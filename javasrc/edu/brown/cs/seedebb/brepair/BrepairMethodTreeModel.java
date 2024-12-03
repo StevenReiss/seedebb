@@ -80,7 +80,7 @@ void countsUpdated()
 }
 
 
-private class UpdateCounts implements Runnable {
+private final class UpdateCounts implements Runnable {
 
    @Override public void run() {
       Object [] spath = new Object[1];

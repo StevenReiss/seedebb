@@ -156,7 +156,7 @@ void update()
 BicexPanel getPanel()                   { return history_panel; }
 
 
-private class Updater implements Runnable {
+private final class Updater implements Runnable {
 
    @Override public void run() {
       process();

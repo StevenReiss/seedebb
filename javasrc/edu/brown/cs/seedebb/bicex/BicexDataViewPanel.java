@@ -115,7 +115,7 @@ BicexDataViewPanel(BicexEvaluationViewer ev)
    double t1 = base.getEndTime();
    double wd = data_panel.getWidth();
    double time = (x/wd)*(t1-t0) + t0;
-   long itime = (long)(time + 0.5);
+   long itime = (long) (time + 0.5);
    return itime;
 }
 
@@ -245,7 +245,7 @@ private class DataPanel extends JPanel {
       double rowht = ht/nrow;
 
       long now = getExecution().getCurrentTime();
-      int timex = (int)((now - t0) / (t1 - t0) * wd);
+      int timex = (int) ((now - t0) / (t1 - t0) * wd);
       g2.setColor(BoardColors.getColor("Bicex.DataViewLine"));
       g2.drawLine(timex,0,timex,(int) ht);
 
@@ -273,8 +273,8 @@ private class DataPanel extends JPanel {
       double t1 = base.getEndTime();
       double wd = getWidth();
       double time = (x/wd)*(t1-t0) + t0;
-      int itime = (int)(time + 0.5);
-      int tdelta = (int)(2 * (t1-t0)/wd);
+      int itime = (int) (time + 0.5);
+      int tdelta = (int) (2 * (t1-t0)/wd);
 
       List<VarData> svd = getCurrentData();
       if (svd == null) return "";
@@ -282,7 +282,7 @@ private class DataPanel extends JPanel {
       double ht = getHeight();
       double nrow = svd.size();
       double rowht = ht/nrow;
-      int row = (int)(evt.getY() / rowht);
+      int row = (int) (evt.getY() / rowht);
       if (row < 0 || row >= svd.size()) return "";
 
       VarData vd = null;

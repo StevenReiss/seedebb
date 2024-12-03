@@ -541,7 +541,7 @@ private class Expander implements TreeExpansionListener, TreeModelListener, Runn
 /*										*/
 /********************************************************************************/
 
-private class UserSelection implements ListSelectionListener {
+private final class UserSelection implements ListSelectionListener {
 
    @Override public void valueChanged(ListSelectionEvent e) {
       if (show_tostring) {

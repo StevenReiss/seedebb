@@ -41,7 +41,7 @@ import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BrepairFactory implements BrepairConstants
+public final class BrepairFactory implements BrepairConstants
 {
 
 
@@ -105,7 +105,7 @@ private BrepairFactory()
 /*										*/
 /********************************************************************************/
 
-private static class TestPopupHandler implements BattConstants.BattPopupHandler {
+private static final class TestPopupHandler implements BattConstants.BattPopupHandler {
 
    @Override public void handlePopupMenu(BattTest test,BudaBubble bbl,JPopupMenu menu) {
       if (test == null) return;
@@ -145,7 +145,7 @@ private static class FixFailureAction extends AbstractAction {
 /*										*/
 /********************************************************************************/
 
-private static class BubbleTracker implements BubbleViewCallback {
+private static final class BubbleTracker implements BubbleViewCallback {
 
    @Override public void doneConfiguration()				{ }
    @Override public void focusChanged(BudaBubble bb,boolean set)	{ }

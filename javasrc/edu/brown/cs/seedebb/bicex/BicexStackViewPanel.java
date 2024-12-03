@@ -149,7 +149,7 @@ private BicexEvaluationContext getContextForPosition(Point pt)
    if (!grow_down) {
       y = stack_panel.getHeight() - y;
     }
-   int row = (int)(y/LAYER_HEIGHT);
+   int row = (int) (y/LAYER_HEIGHT);
    BicexEvaluationContext cur = eval_viewer.getContextForTime(base,(long) time,row);
    return cur;
 }
@@ -246,7 +246,7 @@ private class StackPanel extends JPanel {
 /*										*/
 /********************************************************************************/
 
-private class ClickHandler extends MouseAdapter {
+private final class ClickHandler extends MouseAdapter {
 
    @Override public void mouseClicked(MouseEvent evt) {
       if (evt.getClickCount() > 1) return;

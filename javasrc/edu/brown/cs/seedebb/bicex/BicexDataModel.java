@@ -157,7 +157,7 @@ void noteChange()
 }
 
 
-private class TreeUpdater implements Runnable {
+private final class TreeUpdater implements Runnable {
 
    @Override public void run() {
       Object [] path = new Object[] { root_node };
@@ -359,7 +359,11 @@ abstract class AbstractNode implements TreeNode, BicexTreeNode {
 	 addChildren();
 	 if (sorted_children == null) return;
 	 child_nodes = new Vector<AbstractNode>(sorted_children);
-	 if (lvl > 0) for (AbstractNode an : child_nodes) an.update(lvl-1);
+	 if (lvl > 0) {
+            for (AbstractNode an : child_nodes) {
+               an.update(lvl-1);
+             }
+          }
 	 sorted_children = null;
 	 children_known = true;
        }
@@ -408,7 +412,7 @@ abstract class AbstractNode implements TreeNode, BicexTreeNode {
 
 private class ContextNode extends AbstractNode {
 
-   BicexEvaluationContext eval_context;
+   private BicexEvaluationContext eval_context;
 
    ContextNode(BicexEvaluationContext ctx) {
       this(ctx,null);
@@ -515,7 +519,7 @@ private class ValueNode extends AbstractNode {
 /*										*/
 /********************************************************************************/
 
-private static class ValueSorter implements Comparator<AbstractNode> {
+private static final class ValueSorter implements Comparator<AbstractNode> {
 
    @Override public int compare(AbstractNode n1,AbstractNode n2) {
       String nm1 = n1.getName();

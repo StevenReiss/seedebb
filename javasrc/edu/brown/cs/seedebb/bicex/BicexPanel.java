@@ -213,7 +213,7 @@ protected Color getColorForMethod(String method)
 	    if ((p0 & 1) == 0) p0 = 2*p1 - p0 + 1;
 	    v = v * p0;
 	  }
-	 float h = (float)(v * 0.8);
+	 float h = (float) (v * 0.8);
 	 float s = 0.7f;
 	 float b = 1.0f;
 	 int rgb = Color.HSBtoRGB(h,s,b);

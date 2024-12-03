@@ -240,7 +240,7 @@ static class GraphicsData implements DisplayModel {
 /*										*/
 /********************************************************************************/
 
-static abstract class GraphicsCommand {
+abstract static class GraphicsCommand {
 
    private long command_time;
 

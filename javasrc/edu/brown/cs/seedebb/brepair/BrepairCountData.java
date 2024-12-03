@@ -451,7 +451,7 @@ private class MethodAccumData extends AccumData {
 
 
 
-private static class MethodComparator implements Comparator<MethodAccumData>
+private static final class MethodComparator implements Comparator<MethodAccumData>
 {
    @Override public int compare(MethodAccumData m1,MethodAccumData m2) {
       double s1 = m1.getScore();
@@ -496,7 +496,7 @@ private class BlockAccumData extends AccumData {
 
 
 
-private static class BlockComparator implements Comparator<BlockAccumData>
+private static final class BlockComparator implements Comparator<BlockAccumData>
 {
    @Override public int compare(BlockAccumData m1,BlockAccumData m2) {
       double s1 = m1.getScore();

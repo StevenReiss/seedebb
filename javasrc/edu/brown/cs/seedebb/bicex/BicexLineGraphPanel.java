@@ -201,7 +201,7 @@ private class LineFlowGraph extends JPanel {
    private Node 		current_node;
 
    private static final long serialVersionUID = 1;
-   private static final boolean alt_layout = false;
+   private static final boolean ALT_LAYOUT = false;
 
 
    LineFlowGraph() {
@@ -216,7 +216,7 @@ private class LineFlowGraph extends JPanel {
       levels.setOptimizeLevels(true);
       layout_method = levels;
       PetalLayoutMethod alt = new PetalCircleLayout(petal_editor);
-      if (alt_layout) layout_method = alt;
+      if (ALT_LAYOUT) layout_method = alt;
       add(petal_editor,BorderLayout.CENTER);
       petal_editor.addZoomWheeler();
       current_node = null;
@@ -337,7 +337,7 @@ private class LineFlowGraph extends JPanel {
 
 
 
-private class Model extends PetalModelDefault {
+private final class Model extends PetalModelDefault {
 
 }	// end of inner class Model
 
@@ -380,7 +380,7 @@ private class Arc extends PetalArcDefault
 
    void addInstance() {
       arc_weight++;
-      float wt = (float)(1+Math.log(arc_weight)/Math.log(2));
+      float wt = (float) (1+Math.log(arc_weight)/Math.log(2));
       setStroke(new BasicStroke(wt));
     }
 

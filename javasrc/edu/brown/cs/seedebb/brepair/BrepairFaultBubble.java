@@ -411,7 +411,7 @@ private static class RepairPanel extends SwingGridPanel
 /*										*/
 /********************************************************************************/
 
-private class RefineAction implements ActionListener {
+private final class RefineAction implements ActionListener {
 
    @Override public void actionPerformed(ActionEvent evt) {
       if (execution_bubble == null) return;
@@ -538,7 +538,7 @@ private class LineMarker extends AbstractAction {
 }	// end of inner class LineMarker
 
 
-private class ShowAllAction implements ActionListener {
+private final class ShowAllAction implements ActionListener {
 
    @Override public void actionPerformed(ActionEvent evt) {
       BoardMetrics.noteCommand("BREPAIR","GotoAllSource");
@@ -722,7 +722,7 @@ private class RepairAnnotation implements BaleAnnotation {
 /*										*/
 /********************************************************************************/
 
-private class Selector implements TreeSelectionListener {
+private final class Selector implements TreeSelectionListener {
 
    @Override public void valueChanged(TreeSelectionEvent evt) {
       removeAnnotations();

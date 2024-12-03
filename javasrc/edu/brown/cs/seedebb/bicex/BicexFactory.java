@@ -95,7 +95,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 
-public class BicexFactory implements BicexConstants, MintConstants
+public final class BicexFactory implements BicexConstants, MintConstants
 {
 
 
@@ -145,7 +145,7 @@ public static void setup()
 }
 
 
-private static class ResourceFilter implements BoardPluginFilter {
+private static final class ResourceFilter implements BoardPluginFilter {
 
    @Override public boolean accept(String nm) {
       if (nm.endsWith("poppy.jar")) return true;
@@ -672,7 +672,7 @@ private void startSeede()
 
 
 
-private class StartHandler implements MintHandler {
+private final class StartHandler implements MintHandler {
 
    @Override public void receive(MintMessage msg,MintArguments args) {
       startSeede();
@@ -790,7 +790,7 @@ private void fixupProjects()
 /*										*/
 /********************************************************************************/
 
-private static class StartAction implements BudaConstants.ButtonListener {
+private static final class StartAction implements BudaConstants.ButtonListener {
 
    @Override public void buttonActivated(BudaBubbleArea bba,String id,Point pt) {
       BumpProcess bp = findProcess(bba,pt);
@@ -924,7 +924,7 @@ private static class SeedeStarter implements Runnable {
 /*										*/
 /********************************************************************************/
 
-private class UpdateHandler implements MintHandler {
+private final class UpdateHandler implements MintHandler {
 
    @Override public void receive(MintMessage msg,MintArguments args) {
       String type = args.getArgument(0);
@@ -997,7 +997,7 @@ private BicexExecution getExecution(BaleContextConfig cfg)
 /*										*/
 /********************************************************************************/
 
-private static class BicexContextListener implements BaleContextListener {
+private static final class BicexContextListener implements BaleContextListener {
 
    @Override public String getToolTipHtml(BaleContextConfig cfg) {
       String name = cfg.getToken();
@@ -1053,7 +1053,7 @@ private static class BicexContextListener implements BaleContextListener {
 /*										*/
 /********************************************************************************/
 
-private static class ViewListener implements BubbleViewCallback {
+private static final class ViewListener implements BubbleViewCallback {
 
    @Override public void doneConfiguration()				{ }
    @Override public void focusChanged(BudaBubble bb,boolean set)	{ }
@@ -1095,14 +1095,14 @@ private static class ViewUpdater implements Runnable {
 /*										*/
 /********************************************************************************/
 
-private static class TestPopupHandler implements BattPopupHandler {
+private static final class TestPopupHandler implements BattPopupHandler {
 
    @Override public void handlePopupMenu(BattTest test,BudaBubble bbl,JPopupMenu menu) {
       if (test == null) return;
    
       // don't offer to show the test if there are compiler errors
       BumpClient bc = BumpClient.getBump();
-      switch (bc.getErrorType()) {
+      switch (bc.getErrorType(null)) {
          case FATAL :
          case ERROR :
             return;
