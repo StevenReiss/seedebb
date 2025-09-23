@@ -28,7 +28,6 @@
 		target='10' source='10'
 		includeantruntime='false'>
 	 <classpath refid='seedebb.classpath' />
-	 <compilerarg value='-Xlint:all' />
       </javac>
    </target>
 
