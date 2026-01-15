@@ -292,7 +292,7 @@ private class WhyAction extends AbstractAction {
    private static final long serialVersionUID = 1;
 
    WhyAction(String var,BicexValue val,long when) {
-      super((var.equals("*RETURNS*") ? "WHY return " : "WHY is " + var) + " = " + val.getStringValue(when));
+      super((var.equals("*RETURNS*") ? "WHY return" : "WHY is " + var) + " = " + val.getStringValue(when));
       var_name = var;
       orig_value = val;
       exec_time = when;
@@ -313,8 +313,8 @@ private class WhyAction extends AbstractAction {
       BoardMetrics.noteCommand("BICEX","WhyQuery");
       BudaBubbleArea bba = BudaRoot.findBudaBubbleArea(eval_viewer);
       bba.addBubble(bbl,eval_viewer,null,
-	    BudaConstants.PLACEMENT_LOGICAL|BudaConstants.PLACEMENT_NEW|
-	    BudaConstants.PLACEMENT_MOVETO|BudaConstants.PLACEMENT_USER);
+            BudaConstants.PLACEMENT_LOGICAL|BudaConstants.PLACEMENT_NEW|
+            BudaConstants.PLACEMENT_MOVETO|BudaConstants.PLACEMENT_USER);
     }
 
    private String getLabel() {
