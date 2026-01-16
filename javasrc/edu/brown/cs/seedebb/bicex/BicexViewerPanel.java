@@ -545,37 +545,37 @@ private final class UserSelection implements ListSelectionListener {
 
    @Override public void valueChanged(ListSelectionEvent e) {
       if (show_tostring) {
-	 int row = value_table.getSelectedRow();
-	 String text = "";
-	 if (row >= 0) {
-	    Object v0 = value_table.getValueAt(row,-1);
-	    if (v0 != null) {
-	       BicexDataModel.AbstractNode an = (BicexDataModel.AbstractNode) v0;
-	       BicexValue bv = an.getBicexValue();
-	       long now = getExecution().getCurrentTime();
-	       text = bv.getStringValue(now);
-	       if (bv != null && bv.getChildren(now) != null) {
-		  BicexValue tsv = bv.getChildren(now).get("@toString");
-		  if (tsv != null) text = tsv.getStringValue(now);
-		  else if (bv.getDataType(now).endsWith("[]")) {
-		     StringBuffer buf = new StringBuffer();
-		     buf.append("[");
-		     Map<String,BicexValue> chld = bv.getChildren(now);
-		     for (int i = 0; i < chld.size(); ++i) {
-			String key = "[" + i + "]";
-			BicexValue cbv = chld.get(key);
-			if (cbv != null) {
-			   if (i > 0) buf.append(",");
-			   buf.append(cbv.getStringValue(now));
-			 }
-		      }
-		     buf.append("]");
-		     text = buf.toString();
-		   }
-		}
-	     }
-	  }
-	 tostring_area.setText(text);
+         int row = value_table.getSelectedRow();
+         String text = "";
+         if (row >= 0) {
+            Object v0 = value_table.getValueAt(row,-1);
+            if (v0 != null) {
+               BicexDataModel.AbstractNode an = (BicexDataModel.AbstractNode) v0;
+               BicexValue bv = an.getBicexValue();
+               long now = getExecution().getCurrentTime();
+               text = bv.getStringValue(now);
+               if (bv != null && bv.getChildren(now) != null) {
+        	  BicexValue tsv = bv.getChildren(now).get("@toString");
+        	  if (tsv != null) text = tsv.getStringValue(now);
+        	  else if (bv.getDataType(now).endsWith("[]")) {
+        	     StringBuffer buf = new StringBuffer();
+        	     buf.append("[");
+        	     Map<String,BicexValue> chld = bv.getChildren(now);
+        	     for (int i = 0; i < chld.size(); ++i) {
+        		String key = "[" + i + "]";
+        		BicexValue cbv = chld.get(key);
+        		if (cbv != null) {
+        		   if (i > 0) buf.append(",");
+        		   buf.append(cbv.getStringValue(now));
+        		 }
+        	      }
+        	     buf.append("]");
+        	     text = buf.toString();
+        	   }
+        	}
+             }
+          }
+         tostring_area.setText(text);
        }
     }
 

@@ -139,22 +139,22 @@ static BicexBaseValue createBaseValue(String s)
 /*										*/
 /********************************************************************************/
 
-boolean hasChildren(long when)			{ return false; }
-Map<String,BicexValue> getChildren(long when)	{ return null; }
-String getStringValue(long when)		{ return null; }
-String getDataType(long when)			{ return null; }
-String getFullName()				{ return null; }
+boolean hasChildren(long when)		        { return false; }
+Map<String,BicexValue> getChildren(long when)	        { return null; }
+String getStringValue(long when)		        { return null; }
+String getDataType(long when)			        { return null; }
+String getFullName()				        { return null; }
 
-String getTooltipValue(long when)		{ return null; }
+String getTooltipValue(long when)		        { return null; }
 
-List<Integer> getTimeChanges()			{ return Collections.singletonList(0); }
-long getUpdateTime(long t)			{ return -1; }
+List<Integer> getTimeChanges()			        { return Collections.singletonList(0); }
+long getUpdateTime(long t)			        { return -1; }
 
-boolean isInitializable()			{ return false; }
+boolean isInitializable()			        { return false; }
 
 boolean isComponent(long when)			{ return false; }
 
-void reset()                                    { }
+void reset()                                            { }
 
 
 

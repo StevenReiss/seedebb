@@ -493,8 +493,8 @@ private class ValueNode extends AbstractNode {
    @Override void addChildren() {
       long t = for_execution.getCurrentTime();
       for (Map.Entry<String,BicexValue> ent : for_value.getChildren(t).entrySet()) {
-	 ValueNode nv = new ValueNode(this,ent.getKey(),ent.getValue());
-	 addChild(nv);
+         ValueNode nv = new ValueNode(this,ent.getKey(),ent.getValue());
+         addChild(nv);
        }
     }
 

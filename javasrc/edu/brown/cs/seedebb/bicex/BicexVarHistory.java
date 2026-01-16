@@ -98,7 +98,7 @@ BicexVarHistory(BicexEvaluationViewer ev,BicexValue bv,String name,boolean bbl)
    BicexExecution ex = ev.getExecution();
    start_time = ex.getCurrentTime();
    in_bubble = bbl;
-
+   
    start_node = new VarNode(VarNodeType.VALUE,ex.getCurrentContext(),start_time,name,bv);
 
    history_panel = null;
@@ -284,7 +284,7 @@ List<VarNode> findDependents(VarNode vnorig,Element dep,BicexEvaluationContext c
 	 List<BicexValue> bvs = new ArrayList<>();
 	 switch (knd) {
 	    case FIELD :
-	       System.err.println("FIELD " + vnm + " " + vty);
+	       BoardLog.logD("BICEX","FIELD " + vnm + " " + vty);
 	       for (BicexValue compv : comps) {
 		  Map<String,BicexValue> chld = compv.getChildren(when);
 		  if (chld != null && chld.get(vnm) != null) {
