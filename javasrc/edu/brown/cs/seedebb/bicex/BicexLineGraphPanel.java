@@ -68,8 +68,8 @@ class BicexLineGraphPanel extends BicexPanel implements BicexConstants
 
 private LineFlowGraph		line_graph;
 
-private static String DEFAULT_COLOR_PROP = "Bicex.LineGraphDefault";
-private static String CURRENT_COLOR_PROP = "Bicex.LineGraphCurrent";
+private static final String DEFAULT_COLOR_PROP = "Bicex.LineGraphDefault";
+private static final String CURRENT_COLOR_PROP = "Bicex.LineGraphCurrent";
 
 
 

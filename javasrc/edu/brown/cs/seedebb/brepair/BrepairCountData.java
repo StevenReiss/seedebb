@@ -63,8 +63,8 @@ private List<String>			sorted_methods;
 private double				max_flow_priority;
 private double				flow_factor;
 
-private static double USER_SCALE_FACTOR = 10.0;
-private static double DEFAULT_FLOW_FACTOR = 0.8;
+private static final double USER_SCALE_FACTOR = 10.0;
+private static final double DEFAULT_FLOW_FACTOR = 0.8;
 
 
 
