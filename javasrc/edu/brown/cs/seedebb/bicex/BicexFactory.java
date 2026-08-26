@@ -85,6 +85,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.lang.module.ModuleFinder;
+import java.lang.module.ModuleReader;
+import java.lang.module.ModuleReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -93,6 +96,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 
 
 public final class BicexFactory implements BicexConstants, MintConstants
@@ -189,6 +193,11 @@ public static void initialize(BudaRoot br)
        }
     }
    for (String open : openitems) {
+      if (open.equals("*OPENALL*")) {
+         OpenFinder opener = new OpenFinder();
+         BoardThreadPool.start(opener);
+         continue;
+       }
       String arg = "--add-opens=" + open + "=ALL-UNNAMED";
       bc.addJvmDebugArgument(arg);
     }
@@ -202,6 +211,35 @@ public static BicexFactory getFactory()
    return the_factory;
 }
 
+
+private static final class OpenFinder implements Runnable {
+   
+   @Override public void run() {
+      Set<String> allpkgs = new TreeSet<>();
+      for (ModuleReference ref : ModuleFinder.ofSystem().findAll()) {
+         String mnam = ref.descriptor().name();
+         if (mnam.contains("unsupported")) continue;
+         try (ModuleReader mr = ref.open()) {
+            mr.list().forEach(entry -> {
+               if (entry.endsWith(".class") && entry.contains("/")) {
+                  String pkg = entry.substring(0,entry.lastIndexOf("/"));
+                  pkg = pkg.replace("/",".");
+                  pkg = mnam + "/" + pkg;
+                  allpkgs.add(pkg);
+                }
+             });
+          }
+         catch (IOException e) {
+            BoardLog.logE("BUMP","Problem opening or reading module",e);
+          }
+       }
+      BumpClient bc = BumpClient.getBump();
+      for (String s : allpkgs) {
+         bc.addJvmDebugArgument("--add-opens=" + s + "=ALL-UNNAMED");
+       }
+      BoardLog.logD("BICEX","Finished add all opens to JDK path " + allpkgs.size());
+    }
+}
 
 
 /********************************************************************************/
