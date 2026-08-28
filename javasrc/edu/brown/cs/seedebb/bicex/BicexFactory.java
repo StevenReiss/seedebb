@@ -183,26 +183,26 @@ public static void initialize(BudaRoot br)
 
    BumpClient bc = BumpClient.getBump();
    BoardProperties bp = BoardProperties.getProperties("Bicex");
-   Set<String> openitems = new HashSet<>();
-   for (String s : bp.stringPropertyNames()) {
-      if (s.equals("Bicex.seede.open") || s.startsWith("Bicex.seede.open.")) {
-	 String opens = bp.getProperty(s);
-	 for (StringTokenizer tok = new StringTokenizer(opens); tok.hasMoreTokens(); ) {
-	    openitems.add(tok.nextToken());
-	  }
+   boolean openall = bp.getBoolean("Bicex.seede.openall");
+   if (openall) {
+      OpenFinder opener = new OpenFinder();
+      BoardThreadPool.start(opener);
+    }
+   else {
+      Set<String> openitems = new HashSet<>();
+      for (String s : bp.stringPropertyNames()) {
+         if (s.equals("Bicex.seede.open") || s.startsWith("Bicex.seede.open.")) {
+            String opens = bp.getProperty(s);
+            for (StringTokenizer tok = new StringTokenizer(opens); tok.hasMoreTokens(); ) {
+               openitems.add(tok.nextToken());
+             }
+          }
+       }
+      for (String open : openitems) {
+         String arg = "--add-opens=" + open + "=ALL-UNNAMED";
+         bc.addJvmDebugArgument(arg);
        }
     }
-   for (String open : openitems) {
-      if (open.equals("*OPENALL*")) {
-         OpenFinder opener = new OpenFinder();
-         BoardThreadPool.start(opener);
-         continue;
-       }
-      String arg = "--add-opens=" + open + "=ALL-UNNAMED";
-      bc.addJvmDebugArgument(arg);
-    }
-
-   // getFactory().startSeede();
 }
 
 
